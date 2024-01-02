@@ -1,14 +1,15 @@
 <script setup lang="ts">
-// import TheWelcome from '../components/TheWelcome.vue'
+
 </script>
 
 <template>
-  <main>
-      <div class="common-layout">
-        <el-container>
-          <el-aside width="200px">Aside</el-aside>
-          <el-main>Main</el-main>
-        </el-container>
-      </div>
-  </main>
+  <div class="init-right-area"
+       style="background-color: #d2d2fa; height: 100vh; display: grid; place-items: center; ">
+    <h2 style="text-align: center">欢迎使用<a href="https://github.com/xaoyaoo/PyWxDump.git">PyWxDump</a>聊天记录查看工具!
+    </h2>
+  </div>
 </template>
+
+<style scoped>
+
+</style>

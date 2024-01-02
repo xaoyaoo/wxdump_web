@@ -52,7 +52,6 @@ const handleClose = (key: string, keyPath: string[]) => {
               </el-radio-button>
             </el-radio-group>
 
-
             <el-menu-item index='/chat'>
               <el-icon>
                 <svg t="1704180673772" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -124,7 +123,7 @@ const handleClose = (key: string, keyPath: string[]) => {
               </template>
               <el-menu-item index='/wxinfo'>账号信息</el-menu-item>
               <el-menu-item index='/bias'>基址偏移</el-menu-item>
-              <el-menu-item index='/dbmerge'>数据库合并</el-menu-item>
+              <el-menu-item index='/merge'>数据库合并</el-menu-item>
               <el-menu-item index='/decrypt'>解密数据</el-menu-item>
             </el-sub-menu>
 
@@ -173,8 +172,6 @@ const handleClose = (key: string, keyPath: string[]) => {
             </el-menu-item>
 
           </el-menu>
-
-
         </el-container>
       </el-aside>
 
