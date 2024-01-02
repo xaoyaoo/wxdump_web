@@ -10,6 +10,45 @@ const router = createRouter({
             component: HomeView
         },
         {
+            path: '/chat',
+            name: 'chat',
+            component: () => import((`@/views/ChatView.vue`))
+        },
+        {
+            path: '/export',
+            name: 'export',
+            component: () => import((`@/views/ExportView.vue`))
+        },
+        {
+            path: '/statistics',
+            name: 'statistics',
+            component: () => import((`@/views/StatisticsView.vue`))
+        },
+
+        // 专业工具
+        {
+            path: '/wxinfo',
+            name: 'wxinfo',
+            component: () => import((`@/views/tools/WxinfoView.vue`))
+        },
+        {
+            path: '/bias',
+            name: 'bias',
+            component: () => import((`@/views/tools/BiasView.vue`))
+        },
+        {
+            path: '/merge',
+            name: 'merge',
+            component: () => import((`@/views/tools/MergeView.vue`))
+        },
+        {
+            path: '/decrypt',
+            name: 'decrypt',
+            component: () => import((`@/views/tools/DecryptView.vue`))
+        },
+
+        // 其他 关于、帮助、设置
+        {
             path: '/about',
             name: 'about',
             // route level code-splitting
