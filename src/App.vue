@@ -2,17 +2,8 @@
 import {RouterLink, RouterView} from 'vue-router'
 
 import {ref} from 'vue'
-import {
-  Document,
-  Location,
-  Setting,
-  Message,
-  Menu as IconMenu,
-  Fold,
-  Expand
-} from '@element-plus/icons-vue'
 
-const isCollapse = ref(true)
+const isCollapse = ref(false)
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
@@ -24,14 +15,12 @@ const handleClose = (key: string, keyPath: string[]) => {
 <template>
   <div id="appbg">
 
-    <el-container class="layout-container-demo" style="">
+    <el-container class="layout-container-demo" style="height: 100%">
+
       <el-aside :width="isCollapse ? '64px' : '160px'">
-        <el-scrollbar>
+        <el-container>
           <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
                    @close="handleClose" :router='true'>
-            <!--            <div class="common-layout">-->
-            <!--              <el-container>-->
-            <!--                <el-header>-->
 
             <el-radio-group v-model="isCollapse"
                             style="margin-bottom: 20px;margin-top: 10px;margin-left: 10px;max-height: 30px">
@@ -138,8 +127,8 @@ const handleClose = (key: string, keyPath: string[]) => {
               <el-menu-item index='/dbmerge'>数据库合并</el-menu-item>
               <el-menu-item index='/decrypt'>解密数据</el-menu-item>
             </el-sub-menu>
-            <!--            </el-header>-->
-            <!--            <el-footer>-->
+
+            <br><br><br>
 
             <el-menu-item index='/about'>
               <el-icon>
@@ -182,15 +171,17 @@ const handleClose = (key: string, keyPath: string[]) => {
               </el-icon>
               <template #title>更多设置</template>
             </el-menu-item>
-            <!--                </el-footer>-->
-            <!--              </el-container>-->
-            <!--            </div>-->
+
           </el-menu>
-        </el-scrollbar>
+
+
+        </el-container>
       </el-aside>
 
       <el-main>
-        <RouterView/>
+        <el-scrollbar>
+          <RouterView/>
+        </el-scrollbar>
       </el-main>
 
     </el-container>
@@ -210,36 +201,6 @@ const handleClose = (key: string, keyPath: string[]) => {
 header {
   line-height: 1.5;
   max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
 }
 
 @media (min-width: 1024px) {
