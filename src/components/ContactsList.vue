@@ -30,7 +30,7 @@ const req = async (start: number, limit: number, word: string = null) => {
 
 const fetchData = async () => {
   try {
-    const body_data = await req(0, 100);
+    const body_data = await req(0, 800);
     tableData.value = body_data;
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -73,17 +73,14 @@ const handleCurrentChange = (val: User | undefined) => {
     <!--  这是联系人的list    -->
     <el-table :data="tableData" stripe style="width: 100%" max-height="100%" height="100%" highlight-current-row
               @current-change="handleCurrentChange">
-
-
-
       <el-table-column label="name" width="180">
         <template v-slot="{ row }">
           <span v-if="row.remark !== null && row.remark !== ''">{{ row.remark }}</span>
           <span v-else>{{ row.nickname }}</span>
         </template>
       </el-table-column>
-
       <el-table-column prop="chat_count" label="num" width="70"/>
+
     </el-table>
   </div>
 </template>

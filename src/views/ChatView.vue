@@ -37,7 +37,7 @@ const handleChildData = (val: any) => {
       </el-aside>
 
       <!--这是右边的具体聊天记录-->
-      <div v-if="userData.username != ''" style="width: 100%;height: 100%">
+      <div v-if="userData.username != ''" style="height: calc(100vh);width: 100%;">
         <ChatRecords :userData="userData"/>
       </div>
 

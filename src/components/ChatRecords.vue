@@ -28,8 +28,10 @@ const props = defineProps({
       <ChatRecprdsHeader :userData="userData"/>
     </el-header>
 
-    <el-main style="overflow-y: auto;padding: 10px;">
-      <ChatRecordsMain :userData="userData"/>
+    <el-main style="overflow-y: auto; height: calc(100vh - 65px);">
+      <el-scrollbar>
+        <ChatRecordsMain :userData="userData"/>
+      </el-scrollbar>
     </el-main>
   </el-container>
 </template>
