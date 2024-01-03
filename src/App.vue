@@ -3,7 +3,7 @@ import {RouterLink, RouterView} from 'vue-router'
 
 import {ref} from 'vue'
 
-const isCollapse = ref(false)
+const isCollapse = ref(true)
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }

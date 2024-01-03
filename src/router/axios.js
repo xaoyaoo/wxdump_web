@@ -1,28 +1,24 @@
 // 创建一个 axios 实例
 import axios from 'axios';
+// import {inject, onMounted} from 'vue';
 
 const http = axios.create({
     baseURL: 'http://localhost:5000', // 根据你的实际情况设置基础URL
     // 表示跨域请求时是否需要使用凭证，开启后，后端服务器要设置允许开启
     withCredentials: true,
-    headers: {
-        'token': localStorage.getItem('token') || '',
-        'msg_path': app.config.globalProperties.$msg_path,
-        'micro_path': app.config.globalProperties.$micro_path,
-        'media_path': app.config.globalProperties.$media_path,
-        'filestorage_path': app.config.globalProperties.$filestorage_path,
-
-    },
 });
 
 // 请求拦截器
 http.interceptors.request.use(
     (config) => {
         // 在发送请求之前做些什么，比如添加请求头
-
+        config.headers['Content-Type'] = 'application/json';  // 根据您的需求设置其他请求头
+        // config.headers['msg_path'] = inject("msg_path");
+        // config.headers['micro_path'] = inject("micro_path");
+        // config.headers['media_path'] = inject("media_path");
+        // config.headers['filestorage_path'] = inject("filestorage_path");
         // 补全路径
-        config.url = config.baseURL + config.url;
-        console.log('config.url', config.url);
+        // console.log('config.url', config.url);
         return config;
     },
     (error) => {
@@ -35,7 +31,15 @@ http.interceptors.request.use(
 http.interceptors.response.use(
     (response) => {
         // 对响应数据做点什么
-        return response.data;
+        if (response.data.code === 0) {
+            // 如果后端返回的状态码是 200，说明接口请求成功
+            // 这里直接返回后端返回的数据
+            return response.data.body;
+        } else {
+            // 如果不是 200，说明接口请求失败，弹出后端给的错误提示
+            console.error('Error Message:', response.data.msg);
+            return Promise.reject(response.data.msg);
+        }
     },
     (error) => {
         // 对响应错误做点什么
@@ -54,5 +58,4 @@ http.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
 export default http;
