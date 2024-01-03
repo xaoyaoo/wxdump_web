@@ -42,7 +42,6 @@ const props = defineProps({
   }
 })
 
-const _direction = props.is_sender == 1 ? 'right' : 'left'
 </script>
 
 <style scoped lang="scss">
