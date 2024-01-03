@@ -74,6 +74,7 @@ const _direction = props.is_sender == 1 ? 'right' : 'left'
       }
 
       .info-content {
+        max-width: 80%;
         padding: 10px;
         font-size: 14px;
         background: #fff;
@@ -121,7 +122,7 @@ const _direction = props.is_sender == 1 ? 'right' : 'left'
       }
 
       .info-content {
-        max-width: 70%;
+        max-width: 80%;
         padding: 10px;
         font-size: 14px;
         float: right;
