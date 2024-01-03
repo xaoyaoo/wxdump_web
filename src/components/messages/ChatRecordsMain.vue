@@ -13,6 +13,7 @@ interface User {
   chat_count: number
 }
 
+// 这里的 props 是从父组件传递过来的
 const props = defineProps({
   userData: {
     type: Object as () => User,
@@ -21,12 +22,14 @@ const props = defineProps({
 });
 
 
+// 定义变量
 const messages = ref([]);
 const userlist = ref({});
 const my_wxid = ref('');
 const limit = ref(500);
-const start = ref(props.userData.chat_count - limit.value);
+const start = ref(0);
 
+// 获取聊天记录
 const req = async (start: number, limit: number, username: string) => {
   try {
     const body_data = await http.post('/api/msgs', {
@@ -34,6 +37,7 @@ const req = async (start: number, limit: number, username: string) => {
       'limit': limit,
       'wxid': username,
     });
+    console.log(start, limit, username)
     messages.value = body_data.msg_list;
     userlist.value = body_data.user_list;
     my_wxid.value = body_data.my_wxid;
@@ -53,8 +57,9 @@ const fetchData = async () => {
     return [];
   }
 };
+// END 获取聊天记录
 
-onMounted(fetchData);
+onMounted(fetchData); // 初始化时获取数据
 
 // 监听 userData 中 username 的变化
 watch(() => props.userData.username, (newUsername, oldUsername) => {
@@ -65,7 +70,7 @@ watch(() => props.userData.username, (newUsername, oldUsername) => {
 
 });
 
-
+// 这部分为构造消息的发送时间和头像
 const _direction = (msg: any) => {
   if (msg.talker == '我') {
     msg.talker = my_wxid.value;
@@ -97,6 +102,8 @@ const get_head_url = (msg: any) => {
   }
   return userlist.value[msg.talker].headImgUrl;
 }
+
+// END 这部分为构造消息的发送时间和头像
 
 // type_name_dict = {
 //         (1, 0): "文本",
