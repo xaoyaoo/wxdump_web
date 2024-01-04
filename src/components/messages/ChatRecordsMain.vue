@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {defineProps, toRefs, ref, onMounted, watch} from "vue";
+import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
-import http from '@/router/axios.js';
+import MessageAudio from './MessageAudio.vue';
 
 interface User {
   account: string
@@ -151,6 +152,9 @@ const get_img = (msg: any) => {
           <!-- 图片消息 -->
           <MessageImg v-else-if="msg.type_name == '图片'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                       :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageImg>
+          <!-- 语音消息 -->
+          <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
+                        :headUrl="get_head_url(msg)" :src="msg.MsgSvrID" :msg="msg.content.msg"></MessageAudio>
         </div>
       </div>
     </div>
