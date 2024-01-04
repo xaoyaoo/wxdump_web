@@ -7,8 +7,8 @@
       <div class="info">
         <p class="time">{{ direction }}</p>
 
-        <audio controls>
-          <source src="{{audioSrc}}" type="audio/wav">
+        <audio controls style="background-color:#fff ">
+          <source :src="audioSrc" type="audio/wav">
         </audio>
         <el-textarea
             :rows="1"
@@ -23,8 +23,8 @@
       <div class="info">
         <p class="time">{{ direction }}</p>
 
-        <audio controls>
-          <source src="{{audioSrc}}" type="audio/wav">
+        <audio controls style="background-color:#95EC69;">
+          <source :src="audioSrc" type="audio/wav">
         </audio>
         <el-textarea
             :rows="1"

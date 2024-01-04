@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, toRefs, ref, onMounted, watch} from "vue";
+import {defineProps, toRefs, ref, onMounted, watch, onUnmounted} from "vue";
 import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
@@ -135,10 +135,18 @@ const get_head_url = (msg: any) => {
 //     }
 //     # row_data = {"MsgSvrID": MsgSvrID, "type_name": type_name, "is_sender": IsSender, "talker": talker,
 //     #             "room_name": StrTalker, "content": {"src": "", "msg": StrContent}, "CreateTime": CreateTime}
-const get_img = (msg: any) => {
-  const url = `http://localhost:5000/api/img?img_path=${msg.content.src}`
-  return url;
-}
+//  循环请求获取全部数据
+const loadMore = async () => {
+  let start1 = start.value + limit.value;
+  let limit1 = limit.value;
+  const body_data = await http.post('/api/msgs', {
+    start: start1,
+    limit: limit1,
+    wxid: props.userData.username,
+  });
+  messages.value = messages.value.concat(body_data.msg_list);
+  userlist.value = Object.assign(userlist.value, body_data.user_list);
+};
 </script>
 
 <template>
@@ -155,6 +163,11 @@ const get_img = (msg: any) => {
           <!-- 语音消息 -->
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                         :headUrl="get_head_url(msg)" :src="msg.MsgSvrID" :msg="msg.content.msg"></MessageAudio>
+        </div>
+        <!--    加载更多    -->
+        <div class="load_more" v-if="messages.length<userData.chat_count"
+             style="display: flex; justify-content: center; margin-top: 10px;margin-bottom: 10px;">
+          <el-button type="primary" @click="loadMore">加载更多</el-button>
         </div>
       </div>
     </div>
