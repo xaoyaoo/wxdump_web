@@ -6,14 +6,41 @@
       <img :src="headUrl">
       <div class="info">
         <p class="time">{{ direction }}</p>
-        <div class="info-content" v-html="sanitizeHTML(content)"></div>
+
+        <div class="demo-image__preview">
+          <el-image
+              style="max-width: 150px; max-height: 150px"
+              :src="imgSrc"
+              :zoom-rate="1.2"
+              :max-scale="7"
+              :min-scale="0.2"
+              :preview-src-list="[imgSrc]"
+              :initial-index="4"
+              fit="cover"
+          />
+        </div>
+
       </div>
     </div>
     <!-- 我的 -->
     <div class="word-my" v-else>
       <div class="info">
         <p class="time">{{ direction }}</p>
-        <div class="info-content" v-html="sanitizeHTML(content)"></div>
+
+        <div class="demo-image__preview">
+          <el-image
+              style="max-width: 150px; max-height: 150px"
+              :src="imgSrc"
+              :zoom-rate="1.2"
+              :max-scale="7"
+              :min-scale="0.2"
+              :preview-src-list="[imgSrc]"
+              :initial-index="4"
+              fit="cover"
+          />
+        </div>
+
+        <!--        <img class="chat_img" :src="imgSrc" alt="">-->
       </div>
       <img :src="headUrl">
     </div>
@@ -21,7 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from "vue";
+import {defineProps, onMounted, ref} from "vue";
+import http from '@/router/axios.js';
 
 const props = defineProps({
   is_sender: {
@@ -39,14 +67,29 @@ const props = defineProps({
   direction: {
     type: String,
     default: ''
+  },
+  src: {
+    type: String,
+    default: ''
   }
 })
-const sanitizeHTML = (html) => {
-  // Use DOMParser to parse the HTML and then serialize it to a trusted HTML string
-  html = html.replace(/\n/g, '<br>');
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.innerHTML;
-};
+const imgSrc = ref("");
+
+onMounted(async () => {
+  imgSrc.value = await read_img_base64(props.src);
+});
+const read_img_base64 = async (src: string) => {
+
+  try {
+    const body_data = await http.post('/api/img', {
+      'img_path': src,
+    });
+    return body_data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return "";
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -84,6 +127,12 @@ const sanitizeHTML = (html) => {
         background: #fff;
         position: relative;
         margin-top: 8px;
+      }
+
+      .chat_img {
+        width: 200px;
+        height: 200px;
+        border-radius: 5px;
       }
 
       //小三角形
@@ -137,6 +186,12 @@ const sanitizeHTML = (html) => {
         text-align: left;
       }
 
+      .chat_img {
+        width: 200px;
+        height: 200px;
+        border-radius: 5px;
+      }
+
       //小三角形
       .info-content::after {
         position: absolute;
@@ -149,5 +204,18 @@ const sanitizeHTML = (html) => {
       }
     }
   }
+}
+
+.demo-image__error .image-slot {
+  font-size: 30px;
+}
+
+.demo-image__error .image-slot .el-icon {
+  font-size: 30px;
+}
+
+.demo-image__error .el-image {
+  width: 100%;
+  height: 200px;
 }
 </style>

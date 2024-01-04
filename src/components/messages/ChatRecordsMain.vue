@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {defineProps, toRefs, ref, onMounted, watch} from "vue";
 import MessageText from './MessageText.vue';
+import MessageImg from './MessageImg.vue';
 import http from '@/router/axios.js';
 
 interface User {
@@ -37,7 +38,6 @@ const req = async (start: number, limit: number, username: string) => {
       'limit': limit,
       'wxid': username,
     });
-    console.log(start, limit, username)
     messages.value = body_data.msg_list;
     userlist.value = body_data.user_list;
     my_wxid.value = body_data.my_wxid;
@@ -134,7 +134,10 @@ const get_head_url = (msg: any) => {
 //     }
 //     # row_data = {"MsgSvrID": MsgSvrID, "type_name": type_name, "is_sender": IsSender, "talker": talker,
 //     #             "room_name": StrTalker, "content": {"src": "", "msg": StrContent}, "CreateTime": CreateTime}
-
+const get_img = (msg: any) => {
+  const url = `http://localhost:5000/api/img?img_path=${msg.content.src}`
+  return url;
+}
 </script>
 
 <template>
@@ -145,6 +148,9 @@ const get_head_url = (msg: any) => {
           <!-- 文字消息 -->
           <MessageText v-if="msg.type_name == '文本'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                        :headUrl="get_head_url(msg)" :content="msg.content.msg"></MessageText>
+          <!-- 图片消息 -->
+          <MessageImg v-else-if="msg.type_name == '图片'" :is_sender="msg.is_sender" :direction="_direction(msg)"
+                      :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageImg>
         </div>
       </div>
     </div>
