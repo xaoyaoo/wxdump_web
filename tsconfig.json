@@ -12,6 +12,7 @@
     "types": [
       "node",
       "axios"
-    ]
+    ],
+    "allowJs": true
   }
 }

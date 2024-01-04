@@ -14,7 +14,7 @@ interface User {
   chat_count: number
 }
 
-const req = async (start: number, limit: number, word: string = null) => {
+const req = async (start: number, limit: number, word: string = '') => {
   try {
     const body_data = await http.post('/api/contact_count_list', {
       'start': start,
