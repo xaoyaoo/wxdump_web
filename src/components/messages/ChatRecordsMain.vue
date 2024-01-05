@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, toRefs, ref, onMounted, watch, onUnmounted} from "vue";
+import {defineProps, ref, onMounted, watch, nextTick} from "vue";
 import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
@@ -20,6 +20,10 @@ const props = defineProps({
   userData: {
     type: Object as () => User,
     required: true,
+  },
+  setScrollTop: {
+    type: Function,
+    required: true,
   }
 });
 
@@ -30,6 +34,7 @@ const userlist = ref({});
 const my_wxid = ref('');
 const limit = ref(500);
 const start = ref(0);
+const hasScrolledToTop = ref(false);
 
 // 获取聊天记录
 const req = async (start: number, limit: number, username: string) => {
@@ -53,6 +58,12 @@ const req = async (start: number, limit: number, username: string) => {
 const fetchData = async () => {
   try {
     await req(start.value, limit.value, props.userData.username);
+    if (!hasScrolledToTop.value) {
+      await nextTick(() => {
+        props.setScrollTop();
+        hasScrolledToTop.value = false;
+      });
+    }
   } catch (error) {
     console.error('Error fetching data:', error);
     return [];
@@ -67,8 +78,8 @@ watch(() => props.userData.username, (newUsername, oldUsername) => {
   // 执行你的函数
   // 调用你想执行的函数
   messages.value = [];
+  hasScrolledToTop.value = false;
   fetchData();
-
 });
 
 // 这部分为构造消息的发送时间和头像
@@ -147,6 +158,9 @@ const loadMore = async () => {
   messages.value = messages.value.concat(body_data.msg_list);
   userlist.value = Object.assign(userlist.value, body_data.user_list);
 };
+defineExpose({
+  loadMore
+})
 </script>
 
 <template>

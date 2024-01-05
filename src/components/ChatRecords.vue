@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChatRecprdsHeader from '@/components/messages/ChatRecprdsHeader.vue';
 import ChatRecordsMain from '@/components/messages/ChatRecordsMain.vue';
-import {ref, defineProps} from 'vue';
+import { ref, defineProps, nextTick } from 'vue';
 
 interface User {
   account: string
@@ -20,6 +20,28 @@ const props = defineProps({
   }
 });
 
+const scrollbarRef = ref(null);
+const chatRecordsMainRef = ref(null);
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (scrollbarRef.value) {
+      // 假设el-scrollbar在DOM中是一个具体的元素
+      const target = scrollbarRef.value.$el.children[0];
+      if (target) {
+        target.scrollTop = target.scrollHeight;
+      }
+    }
+  });
+};
+
+function handleScroll({ scrollTop }) {
+  if (scrollTop === 0) {
+    if (chatRecordsMainRef.value) {
+      chatRecordsMainRef.value.loadMore()
+    }
+  }
+}
+
 </script>
 
 <template>
@@ -29,8 +51,8 @@ const props = defineProps({
     </el-header>
 
     <el-main style="overflow-y: auto; height: calc(100vh - 65px);">
-      <el-scrollbar>
-        <ChatRecordsMain :userData="userData"/>
+      <el-scrollbar ref="scrollbarRef" @scroll="handleScroll">
+        <ChatRecordsMain ref="chatRecordsMainRef" :userData="userData" :setScrollTop="scrollToBottom"/>
       </el-scrollbar>
     </el-main>
   </el-container>
