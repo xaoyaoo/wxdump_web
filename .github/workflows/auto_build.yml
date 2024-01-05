@@ -27,10 +27,6 @@ jobs:
     - name: Cheak dist
       run: ls dist
 
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    steps:
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
