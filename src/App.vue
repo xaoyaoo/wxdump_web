@@ -14,14 +14,11 @@ const handleClose = (key: string, keyPath: string[]) => {
 
 <template>
   <div id="appbg">
-
-    <el-container class="layout-container-demo" style="height: 100%">
-
+    <el-container class="layout-container-demo" style="height: 100%;background:none;">
       <el-aside :width="isCollapse ? '64px' : '160px'">
-        <el-container>
+        <el-container class="sidebar-container">
           <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
                    @close="handleClose" :router='true'>
-
             <el-radio-group v-model="isCollapse"
                             style="margin-bottom: 20px;margin-top: 10px;margin-left: 10px;max-height: 30px">
               <el-radio-button :label="false" v-if="isCollapse">
@@ -126,9 +123,9 @@ const handleClose = (key: string, keyPath: string[]) => {
               <el-menu-item index='/merge'>数据库合并</el-menu-item>
               <el-menu-item index='/decrypt'>解密数据</el-menu-item>
             </el-sub-menu>
-
-            <br><br><br>
-
+          </el-menu>
+          <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
+                   @close="handleClose" :router='true'>
             <el-menu-item index='/about'>
               <el-icon>
                 <svg t="1704181424728" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -229,7 +226,6 @@ header {
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 160px;
-  min-height: 400px;
 }
 
 .layout-container-demo .el-header {
@@ -240,7 +236,6 @@ header {
 
 .layout-container-demo .el-aside {
   color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
 }
 
 .layout-container-demo .el-menu {
@@ -257,5 +252,10 @@ header {
   justify-content: center;
   height: 100%;
   right: 0px;
+}
+.sidebar-container {
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 </style>

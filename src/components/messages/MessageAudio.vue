@@ -176,6 +176,7 @@ const read_audio_base64 = async (src: string) => {
         margin-top: 8px;
         background: #95EC69;
         text-align: left;
+        display: inline-block;
       }
 
       .chat_img {
