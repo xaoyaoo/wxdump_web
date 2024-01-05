@@ -26,9 +26,3 @@ jobs:
 
     - name: Cheak dist
       run: ls dist
-
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
-      with:
-        branch: gh-pages  # Change to the branch you want to deploy to
-        folder: dist
