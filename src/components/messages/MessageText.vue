@@ -84,6 +84,7 @@ const sanitizeHTML = (html) => {
         background: #fff;
         position: relative;
         margin-top: 8px;
+        display: inline-block;
       }
 
       //小三角形
@@ -135,6 +136,7 @@ const sanitizeHTML = (html) => {
         margin-top: 8px;
         background: #95EC69;
         text-align: left;
+        display: inline-block;
       }
 
       //小三角形
