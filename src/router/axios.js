@@ -3,7 +3,7 @@ import axios from 'axios';
 // import {inject, onMounted} from 'vue';
 
 const http = axios.create({
-    baseURL: 'http://localhost:5000', // 根据你的实际情况设置基础URL
+    baseURL: 'http://127.0.0.1:5000', // 根据你的实际情况设置基础URL
     // 表示跨域请求时是否需要使用凭证，开启后，后端服务器要设置允许开启
     withCredentials: true,
 });

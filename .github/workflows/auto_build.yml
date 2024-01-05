@@ -1,0 +1,36 @@
+name: Build and Deploy Vue App
+
+on:
+  push:
+    branches:
+      - web
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the app
+      run: npm run build
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        branch: gh-pages  # Change to the branch you want to deploy to
+        folder: dist
