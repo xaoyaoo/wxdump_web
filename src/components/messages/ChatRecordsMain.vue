@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, ref, onMounted, watch, nextTick} from "vue";
+import {defineProps, ref, onMounted, watch, nextTick, defineExpose} from "vue";
 import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
@@ -13,6 +13,20 @@ interface User {
   remark: string
   username: string
   chat_count: number
+}
+
+interface msg {
+  id: number
+  type_name: string
+  is_sender: number
+  talker: string
+  room_name: string
+  content: {
+    src: string
+    msg: string
+  }
+  CreateTime: string
+  MsgSvrID: string
 }
 
 // 这里的 props 是从父组件传递过来的
@@ -29,10 +43,10 @@ const props = defineProps({
 
 
 // 定义变量
-const messages = ref([]);
+const messages = ref<msg[]>([]);
 const userlist = ref({});
 const my_wxid = ref('');
-const limit = ref(500);
+const limit = ref(200);
 const start = ref(0);
 const hasScrolledToTop = ref(false);
 
@@ -57,6 +71,7 @@ const req = async (start: number, limit: number, username: string) => {
 
 const fetchData = async () => {
   try {
+    start.value = props.userData.chat_count - limit.value;
     await req(start.value, limit.value, props.userData.username);
     if (!hasScrolledToTop.value) {
       await nextTick(() => {
@@ -148,14 +163,23 @@ const get_head_url = (msg: any) => {
 //     #             "room_name": StrTalker, "content": {"src": "", "msg": StrContent}, "CreateTime": CreateTime}
 //  循环请求获取全部数据
 const loadMore = async () => {
-  let start1 = start.value + limit.value;
   let limit1 = limit.value;
+  let start1 = start.value - limit1;
   const body_data = await http.post('/api/msgs', {
     start: start1,
     limit: limit1,
     wxid: props.userData.username,
   });
-  messages.value = messages.value.concat(body_data.msg_list);
+  start.value = start1;
+  messages.value = body_data.msg_list.concat(messages.value);
+  // 排序
+  messages.value.sort((a, b) => {
+    return a.id - b.id;
+  });
+  // 去重
+  messages.value = messages.value.filter((item, index, array) => {
+    return index === 0 || item.id !== array[index - 1].id;
+  });
   userlist.value = Object.assign(userlist.value, body_data.user_list);
 };
 defineExpose({
@@ -167,6 +191,12 @@ defineExpose({
   <div id="chat">
     <div class="chat_body">
       <div class="chat_window" ref="chatWindow">
+        <!--    加载更多    -->
+        <div class="load_more" v-if="messages.length<userData.chat_count"
+             style="display: flex; justify-content: center; margin-top: 10px;margin-bottom: 10px;">
+          <el-button type="primary" @click="loadMore">加载更多</el-button>
+        </div>
+
         <div class="message" v-for="(msg,index) in messages" :key="index">
           <!-- 文字消息 -->
           <MessageText v-if="msg.type_name == '文本'" :is_sender="msg.is_sender" :direction="_direction(msg)"
@@ -178,11 +208,7 @@ defineExpose({
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                         :headUrl="get_head_url(msg)" :src="msg.MsgSvrID" :msg="msg.content.msg"></MessageAudio>
         </div>
-        <!--    加载更多    -->
-        <div class="load_more" v-if="messages.length<userData.chat_count"
-             style="display: flex; justify-content: center; margin-top: 10px;margin-bottom: 10px;">
-          <el-button type="primary" @click="loadMore">加载更多</el-button>
-        </div>
+
       </div>
     </div>
   </div>
