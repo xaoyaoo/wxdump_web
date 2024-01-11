@@ -194,7 +194,7 @@ defineExpose({
         <!--    加载更多    -->
         <div class="load_more" v-if="messages.length<userData.chat_count"
              style="display: flex; justify-content: center; margin-top: 10px;margin-bottom: 10px;">
-          <el-button type="primary" @click="loadMore">加载更多</el-button>
+          <el-button type="primary" @click="loadMore">查看更多消息</el-button>
         </div>
 
         <div class="message" v-for="(msg,index) in messages" :key="index">
