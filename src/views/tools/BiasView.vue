@@ -12,7 +12,7 @@ const result = ref<string>(''); // 结果
 
 const decrypt = async () => {
   try {
-    result.value = await http.post('/api/decrypt', {
+    result.value = await http.post('/api/biasaddr', {
       mobile: mobile.value,
       name: name.value,
       account: account.value,
