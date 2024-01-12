@@ -88,7 +88,7 @@ const handleClose = (key: string, keyPath: string[]) => {
                       p-id="2710"></path>
                 </svg>
               </el-icon>
-              <template #title>聊天导出</template>
+              <template #title>聊天备份</template>
             </el-menu-item>
 
             <el-menu-item index='/statistics'>
