@@ -64,7 +64,7 @@ function handleScroll({ scrollTop }) {
       <ChatRecprdsHeader :userData="userData"/>
     </el-header>
 
-    <el-main style="overflow-y: auto; height: calc(100vh - 65px);">
+    <el-main style="overflow-y: auto; height: calc(100vh - 65px);padding: 0">
       <el-scrollbar ref="scrollbarRef" @scroll="handleScroll">
         <ChatRecordsMain
             ref="chatRecordsMainRef"
