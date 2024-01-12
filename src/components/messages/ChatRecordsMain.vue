@@ -38,6 +38,10 @@ const props = defineProps({
   setScrollTop: {
     type: Function,
     required: true,
+  },
+  updateScrollTop: {
+    type: Function,
+    required: true,
   }
 });
 
@@ -181,6 +185,10 @@ const loadMore = async () => {
     return index === 0 || item.id !== array[index - 1].id;
   });
   userlist.value = Object.assign(userlist.value, body_data.user_list);
+
+  await nextTick(() => {
+    props.updateScrollTop()
+  })
 };
 defineExpose({
   loadMore
