@@ -1,12 +1,49 @@
 <script setup lang="ts">
+import {ref} from "vue";
+import http from '@/router/axios.js';
 
+const dbPath = ref<string>('');
+const outPath = ref<string>('');
+const Result = ref<string>('');
+
+const decrypt = async () => {
+  try {
+    Result.value = await http.post('/api/merge', {
+      dbPath: dbPath.value,
+      outPath: outPath.value
+    });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return [];
+  }
+
+};
 </script>
 
 <template>
   <div style="background-color: #d2d2fa; height: 100vh; display: grid; place-items: center; ">
-    <h2 style="text-align: center">欢迎使用<a href="https://github.com/xaoyaoo/PyWxDump.git">PyWxDump</a>聊天记录查看工具!
-    </h2>
-    <p>如需提前体验更多功能，请开通超级vip</p>
+    <div style="background-color: #fff; width: 70%; height: 70%; border-radius: 10px; padding: 20px; overflow: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 20px; font-weight: bold;">解密-微信数据库</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <!--          <el-button style="margin-right: 10px;" @click="exportData">导出</el-button>-->
+        </div>
+      </div>
+      <div style="margin-top: 20px;">
+        <label>密钥（key）: </label>
+        <el-input placeholder="数据库路径（文件夹，并且确保文件夹下的db文件已经解密）：" v-model="dbPath" style="width: 50%;"></el-input>
+        <br>
+        <label>微信数据库路径: </label>
+        <el-input placeholder="输出文件夹" v-model="outPath" style="width: 50%;"></el-input>
+        <br>
+        <el-button style="margin-top: 10px;width: 50%;" type="success" @click="decrypt">合并</el-button>
+        <!--    分割线    -->
+        <el-divider></el-divider>
+        <!--    分割线    -->
+        <el-input type="textarea" :rows="10" readonly placeholder="解密后数据库路径" v-model="Result"
+                  style="width: 100%;"></el-input>
+      </div>
+    </div>
   </div>
 </template>
 
