@@ -22,6 +22,9 @@ const props = defineProps({
 
 const scrollbarRef = ref(null);
 const chatRecordsMainRef = ref(null);
+const scrollTop = ref(0);
+const scrollHeight = ref(0);
+
 const scrollToBottom = () => {
   nextTick(() => {
     if (scrollbarRef.value) {
@@ -29,10 +32,21 @@ const scrollToBottom = () => {
       const target = scrollbarRef.value.$el.children[0];
       if (target) {
         target.scrollTop = target.scrollHeight;
+        scrollHeight.value = target.scrollHeight;
       }
     }
   });
 };
+
+const updateScrollTop = () => {
+  const target = scrollbarRef.value.$el.children[0];
+  if (target) {
+    const lastScrollHeight = scrollHeight.value;
+    const heightDiff = target.scrollHeight - lastScrollHeight;
+    target.scrollTop = target.scrollTop + heightDiff;
+    scrollHeight.value = target.scrollHeight;
+  }
+}
 
 function handleScroll({ scrollTop }) {
   if (scrollTop === 0) {
@@ -50,9 +64,14 @@ function handleScroll({ scrollTop }) {
       <ChatRecprdsHeader :userData="userData"/>
     </el-header>
 
-    <el-main style="overflow-y: auto; height: calc(100vh - 65px);">
+    <el-main style="overflow-y: auto; height: calc(100vh - 65px);padding: 0">
       <el-scrollbar ref="scrollbarRef" @scroll="handleScroll">
-        <ChatRecordsMain ref="chatRecordsMainRef" :userData="userData" :setScrollTop="scrollToBottom"/>
+        <ChatRecordsMain
+            ref="chatRecordsMainRef"
+            :userData="userData"
+            :setScrollTop="scrollToBottom"
+            :updateScrollTop="updateScrollTop"
+        />
       </el-scrollbar>
     </el-main>
   </el-container>
