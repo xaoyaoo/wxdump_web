@@ -218,7 +218,7 @@ defineExpose({
                       :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageImg>
           <!-- 语音消息 -->
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
-                        :headUrl="get_head_url(msg)" :src="msg.MsgSvrID" :msg="msg.content.msg"></MessageAudio>
+                        :headUrl="get_head_url(msg)" :src="'api/'+msg.content.src" :msg="msg.content.msg"></MessageAudio>
         </div>
 
       </div>

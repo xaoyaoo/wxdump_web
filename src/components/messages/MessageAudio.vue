@@ -1,46 +1,8 @@
-<template>
-  <div class="chat-content">
-    <!-- recordContent 聊天记录数组-->
-    <!-- 对方 -->
-    <div class="word" v-if="!is_sender">
-      <img :src="headUrl">
-      <div class="info">
-        <p class="time">{{ direction }}</p>
-
-        <audio controls style="background-color:#fff ">
-          <source :src="audioSrc" type="audio/wav">
-        </audio>
-        <el-textarea
-            :rows="1"
-            :readonly="true"
-            :value="msg"
-            style="width: 100%;"/>
-
-      </div>
-    </div>
-    <!-- 我的 -->
-    <div class="word-my" v-else>
-      <div class="info">
-        <p class="time">{{ direction }}</p>
-
-        <audio controls style="background-color:#95EC69;">
-          <source :src="audioSrc" type="audio/wav">
-        </audio>
-        <el-textarea
-            :rows="1"
-            :readonly="true"
-            :value="msg"
-            style="width: 100%;"/>
-
-      </div>
-      <img :src="headUrl">
-    </div>
-  </div>
-</template>
 
 <script setup lang="ts">
 import {defineProps, onMounted, ref} from "vue";
-import http from '@/router/axios.js';
+// import http from '@/router/axios.js';
+import ElTextarea from 'element-plus';
 
 const props = defineProps({
   is_sender: {
@@ -64,25 +26,65 @@ const props = defineProps({
     default: ''
   },
 })
-const audioSrc = ref("");
+// const audioSrc = ref("");
 
-onMounted(async () => {
-  audioSrc.value = await read_audio_base64(props.src);
-});
-
-const read_audio_base64 = async (src: string) => {
-
-  try {
-    const body_data = await http.post('/api/audio', {
-      'MsgSvrID': src,
-    });
-    return body_data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return "";
-  }
-}
+// onMounted(async () => {
+//   // audioSrc.value = await read_audio_base64(props.src);
+// });
+//
+// const read_audio_base64 = async (src: string) => {
+//
+//   // try {
+//   //   const body_data = await http.post('/api/audio', {
+//   //     'savePath': src,
+//   //   });
+//   //   return body_data;
+//   // } catch (error) {
+//   //   console.error('Error fetching data:', error);
+//   //   return "";
+//   // }
+//   return src;
+// }
 </script>
+
+<template>
+  <div class="chat-content">
+    <!-- recordContent 聊天记录数组-->
+    <!-- 对方 -->
+    <div class="word" v-if="!is_sender">
+      <img :src="headUrl">
+      <div class="info">
+        <p class="time">{{ direction }}</p>
+
+        <audio controls style="background-color:#fff ">
+          <source :src="src" type="audio/wav">
+        </audio>
+        <el-textarea
+            :rows="1"
+            :readonly="true"
+            :value="msg"
+            style="width: 100%;"/>
+
+      </div>
+    </div>
+    <!-- 我的 -->
+    <div class="word-my" v-else>
+      <div class="info">
+        <p class="time">{{ direction }}</p>
+
+        <audio controls style="background-color:#95EC69;">
+          <source :src="src" type="audio/wav">
+        </audio>
+        <el-textarea
+            :rows="1"
+            :readonly="true"
+            :value="msg"
+            style="width: 100%;"/>
+      </div>
+      <img :src="headUrl">
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 
