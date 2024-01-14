@@ -15,6 +15,10 @@ interface User {
   chat_count: number
 }
 
+interface UserList {
+  [key: string]: User
+}
+
 interface msg {
   id: number
   type_name: string
@@ -48,9 +52,9 @@ const props = defineProps({
 
 // 定义变量
 const messages = ref<msg[]>([]);
-const userlist = ref({});
+const userlist = ref<UserList>({});
 const my_wxid = ref('');
-const limit = ref(200);
+const limit = ref(50);
 const start = ref(0);
 const hasScrolledToTop = ref(false);
 
