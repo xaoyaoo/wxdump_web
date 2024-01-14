@@ -22,7 +22,6 @@ const props = defineProps({
 });
 // 这是传递的参数
 const exportType = ref('');
-const outPath = ref('');
 const datetime = ref([]);
 const chatType = ref(['文本']);
 
@@ -30,7 +29,8 @@ const Result = ref(''); // 用于显示返回值
 // END 这是传递的参数
 
 
-const chatTypeAll = ['文本', '图片', '视频', '语音', '文件', '链接', '小程序', '红包', '转账', '位置', '名片', '系统消息', '收藏', '其他'];
+const chatTypeAll = ['文本', '图片', '语音', '视频', '动画表情', '文件', '卡片式链接', '用户上传的GIF表情',
+  '转账消息', '赠送红包封面', '语音通话', '系统通知', '拍一拍', '系统通知', '其他'];
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
 
@@ -51,19 +51,18 @@ const handDatetimeChildData = (val: any) => {
 // 导出数据
 const exportData = async () => {
   try {
-    console.log(exportType.value, outPath.value);
-    console.log("time789",datetime.value);
-    console.log(chatType.value);
-    console.log(props.userData.username);
-    // const body_data = await http.post('/api/export', {
-    //   'export_type': exportType.value,
-    //   'out_path': outPath.value,
-    //   'start_time': datetime.value[0],
-    //   'end_time': datetime.value[1],
-    //   'chat_type': chatType.value,
-    //   'username': props.userData.username,
-    // });
-    // Result.value = body_data;
+    if (exportType.value === '') {
+      Result.value = '导出类型不能为空';
+      return;
+    }
+    const body_data = await http.post('/api/export', {
+      'export_type': exportType.value,
+      'start_time': datetime.value[0],
+      'end_time': datetime.value[1],
+      'chat_type': chatType.value,
+      'username': props.userData.username,
+    });
+    Result.value = body_data;
   } catch (error) {
     console.error('Error fetching data:', error);
     Result.value = String(error);
@@ -98,25 +97,27 @@ const exportData = async () => {
               <el-option label="pdf" value="pdf"></el-option>
               <el-option label="docx" value="docx"></el-option>
             </el-select>
-            <br>
-            导出路径:
-            <el-input placeholder="请输入导出路径" v-model="outPath" style="width: 50%;"></el-input>
-            <br>
-            其他选项:<br>
-            ① 时间：
-            <DateTimeSelect @datetime="handDatetimeChildData"/>
-            <br>
-            ② 消息类型：
-            <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选
-            </el-checkbox>
-            <el-checkbox-group v-model="chatType" @change="handleCheckedCitiesChange">
-              <el-checkbox v-for="typeName in chatTypeAll" :key="typeName" :label="typeName">{{ typeName }}
-              </el-checkbox>
-            </el-checkbox-group>
+            <br><br>
+            <div>
+              选项:<br>
+              <div>
+                ① 时间(默认全部)：
+                <DateTimeSelect @datetime="handDatetimeChildData"/>
+              </div>
+              <div>
+                ② 消息类型：
+                <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选
+                </el-checkbox>
+                <el-checkbox-group v-model="chatType" @change="handleCheckedCitiesChange">
+                  <el-checkbox v-for="typeName in chatTypeAll" :key="typeName" :label="typeName">{{ typeName }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </div>
+            </div>
 
             <el-button style="margin-top: 10px;width: 50%;" type="success" @click="exportData">导出</el-button>
             <el-divider></el-divider>  <!--    分割线    -->
-            <el-input type="textarea" :rows="10" readonly placeholder="导出结果" v-model="Result"
+            <el-input type="textarea" :rows="8" readonly placeholder="导出结果" v-model="Result"
                       style="width: 100%;"></el-input>
           </div>
         </div>
