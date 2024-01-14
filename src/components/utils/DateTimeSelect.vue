@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-
-
-const value2 = ref('')
+import {defineEmits, ref, watch} from 'vue';
 
 const defaultTime: [Date, Date] = [
   new Date(2000, 1, 1, 0, 0, 0),
@@ -72,23 +69,34 @@ const shortcuts = [
     },
   },
 ]
-const datetime = ref([])
+
+const datetime = ref([Date, Date])
+const emits = defineEmits(['datetime']);
+
 // 向父组件传递数据
-const handleChildData = (val: any) => {
-  datetime.value = val;
-}
+// 检测datetime的变化
+watch(() => datetime.value, (newVal, oldVal) => {
+  // console.log('datetime', newVal)
+  let start = newVal[0].getTime();
+  let end = newVal[1].getTime();
+
+  // 向父组件传递数据
+  emits('datetime', [start, end]);
+})
+
 </script>
 
 <template>
   <!--  <div class="block">-->
   <el-date-picker
-      v-model="value2"
+      v-model="datetime"
       type="datetimerange"
       :shortcuts="shortcuts"
       range-separator="至"
       start-placeholder="开始时间"
       end-placeholder="结束时间"
       :default-time="defaultTime"
+      format="YYYY-MM-DD HH:mm"
   />
   <!--  </div>-->
 </template>

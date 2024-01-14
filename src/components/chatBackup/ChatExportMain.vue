@@ -2,6 +2,7 @@
 import {ref, defineProps, nextTick} from 'vue';
 import ChatRecprdsHeader from "@/components/messages/ChatRecprdsHeader.vue";
 import DateTimeSelect from "@/components/utils/DateTimeSelect.vue";
+import http from '@/router/axios.js';
 
 interface User {
   account: string
@@ -13,22 +14,61 @@ interface User {
   chat_count: number
 }
 
-
 const props = defineProps({
   userData: {
     type: Object as () => User,
     required: true,
   }
 });
-
+// 这是传递的参数
 const exportType = ref('');
 const outPath = ref('');
 const datetime = ref([]);
+const chatType = ref(['文本']);
+
+const Result = ref(''); // 用于显示返回值
+// END 这是传递的参数
 
 
+const chatTypeAll = ['文本', '图片', '视频', '语音', '文件', '链接', '小程序', '红包', '转账', '位置', '名片', '系统消息', '收藏', '其他'];
+const checkAll = ref(false)
+const isIndeterminate = ref(true)
 
-const Result = ref('');
+const handleCheckAllChange = (val: boolean) => {
+  chatType.value = val ? chatTypeAll : [] // 全选
+  isIndeterminate.value = false // 全选后不显示半选状态
+}
+const handleCheckedCitiesChange = (value: string[]) => {
+  const checkedCount = value.length // 选中的个数
+  checkAll.value = checkedCount === chatTypeAll.length // 全选
+  isIndeterminate.value = checkedCount > 0 && checkedCount < chatTypeAll.length // 半选
+}
 
+const handDatetimeChildData = (val: any) => {
+  datetime.value = val;
+}
+
+// 导出数据
+const exportData = async () => {
+  try {
+    console.log(exportType.value, outPath.value);
+    console.log("time789",datetime.value);
+    console.log(chatType.value);
+    console.log(props.userData.username);
+    // const body_data = await http.post('/api/export', {
+    //   'export_type': exportType.value,
+    //   'out_path': outPath.value,
+    //   'start_time': datetime.value[0],
+    //   'end_time': datetime.value[1],
+    //   'chat_type': chatType.value,
+    //   'username': props.userData.username,
+    // });
+    // Result.value = body_data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    Result.value = String(error);
+  }
+}
 </script>
 
 <template>
@@ -63,17 +103,20 @@ const Result = ref('');
             <el-input placeholder="请输入导出路径" v-model="outPath" style="width: 50%;"></el-input>
             <br>
             其他选项:<br>
-            ① 时间：  <DateTimeSelect @datetime="handleChildData"/>
+            ① 时间：
+            <DateTimeSelect @datetime="handDatetimeChildData"/>
             <br>
-            ② 消息类型： <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-              <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+            ② 消息类型：
+            <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选
+            </el-checkbox>
+            <el-checkbox-group v-model="chatType" @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="typeName in chatTypeAll" :key="typeName" :label="typeName">{{ typeName }}
+              </el-checkbox>
             </el-checkbox-group>
 
-
-            <br>
             <el-button style="margin-top: 10px;width: 50%;" type="success" @click="exportData">导出</el-button>
             <el-divider></el-divider>  <!--    分割线    -->
-            <el-input type="textarea" :rows="10" readonly placeholder="导出结果" v-model="exportResult"
+            <el-input type="textarea" :rows="10" readonly placeholder="导出结果" v-model="Result"
                       style="width: 100%;"></el-input>
           </div>
         </div>
