@@ -89,13 +89,13 @@ const exportData = async () => {
           <div style="margin-top: 20px;">
             导出类型:
             <el-select v-model="exportType" placeholder="请选择导出类型" style="width: 50%;">
-              <el-option label="加密db文件" value="endb"></el-option>
-              <el-option label="解密db文件" value="dedb"></el-option>
-              <el-option label="csv" value="csv"></el-option>
-              <el-option label="json" value="json"></el-option>
-              <el-option label="html" value="html"></el-option>
-              <el-option label="pdf" value="pdf"></el-option>
-              <el-option label="docx" value="docx"></el-option>
+              <el-option label="加密文件(可还原回微信)-开发中" value="endb"></el-option>
+              <el-option label="解密文件-开发中" value="dedb"></el-option>
+              <el-option label="csv(只包含文字)-开发中" value="csv"></el-option>
+              <el-option label="json(只包含文字)-开发中" value="json"></el-option>
+              <el-option label="html-开发中" value="html"></el-option>
+              <el-option label="pdf-开发中" value="pdf"></el-option>
+              <!--              <el-option label="docx-开发中" value="docx"></el-option>-->
             </el-select>
             <br><br>
             <div>
