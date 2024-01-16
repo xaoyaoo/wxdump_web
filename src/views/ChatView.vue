@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ContactsList from '@/components/ContactsList.vue';
 import ChatRecords from '@/components/ChatRecords.vue';
+import IsAutoShow from '@/components/messages/IsAutoShow.vue';
 import {ref} from "vue";
 import HomeView from "@/views/HomeView.vue";
 import http from '@/router/axios.js';
@@ -28,23 +29,17 @@ const handleChildData = (val: any) => {
   userData.value = val;
 }
 
-
 const is_init = ref(false);
-const selectedOption = ref('auto');
+
+const init = (child_init: boolean) => {
+  is_init.value = child_init;
+}
 
 </script>
 <template>
   <div id="chat_view" class="common-layout">
     <div v-if="!is_init">
-      <div style="background-color: #d2d2fa; height: 100vh; display: grid; place-items: center; ">
-        <label>
-          <input type="radio" v-model="selectedOption" value="auto"/> 自动解密并显示当前微信
-        </label>
-        <br/>
-        <label>
-          <input type="radio" v-model="selectedOption" value="custom"/> 显示自定义文件
-        </label>
-      </div>
+      <IsAutoShow @isAutoShow="init"/>
     </div>
     <div v-else>
       <el-container>
