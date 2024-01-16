@@ -8,6 +8,14 @@ const defaultTime: [Date, Date] = [
 
 const shortcuts = [
   {
+    text: '全部',
+    value: () => {
+      const end = new Date();
+      const start = new Date(2010, 0, 1, 0, 0, 0);
+      return [start, end]
+    },
+  },
+  {
     text: '最近一周',
     value: () => {
       const end = new Date()

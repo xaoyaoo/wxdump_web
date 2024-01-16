@@ -24,6 +24,7 @@ const props = defineProps({
 const exportType = ref('');
 const datetime = ref([]);
 const chatType = ref(['文本']);
+const wx_path = ref('');
 
 const Result = ref(''); // 用于显示返回值
 // END 这是传递的参数
@@ -61,6 +62,7 @@ const exportData = async () => {
       'end_time': datetime.value[1],
       'chat_type': chatType.value,
       'username': props.userData.username,
+      'wx_path': wx_path.value,
     });
     Result.value = body_data;
   } catch (error) {
@@ -112,6 +114,11 @@ const exportData = async () => {
                   <el-checkbox v-for="typeName in chatTypeAll" :key="typeName" :label="typeName">{{ typeName }}
                   </el-checkbox>
                 </el-checkbox-group>
+              </div>
+              <div>
+                ③ 微信文件夹路径：
+                <el-input placeholder="微信文件夹路径[可为空](eg: C:\****\WeChat Files\wxid_**** )" v-model="wx_path"
+                          style="width: 50%;"></el-input>
               </div>
             </div>
 
