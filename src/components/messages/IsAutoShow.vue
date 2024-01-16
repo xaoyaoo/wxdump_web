@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import http from "@/router/axios";
 import {defineEmits, onMounted, ref, watch} from "vue";
-import {ElTable, ElTableColumn} from "element-plus";
-
+import {ElTable, ElTableColumn,ElMessage} from "element-plus";
 interface wxinfo {
   pid: string;
   version: string;
@@ -48,8 +47,8 @@ const is_init = ref(false);
 const wxinfoData = ref<wxinfo[]>([]);
 const oneWx = ref("");
 const decryping = ref(false);
-
 const isAutoShow = ref("");
+
 const msg_path = ref("");
 const micro_path = ref("");
 const media_path = ref("");
@@ -101,22 +100,25 @@ const okWx = () => {
 // 初始化，提交数据
 const init = async () => {
   try {
-    const body_data = await http.post('/api/init', {
-      "is_auto_show": isAutoShow.value,
+    let reqdata = {
       "msg_path": msg_path.value,
       "micro_path": micro_path.value,
       "media_path": media_path.value,
       "wx_path": wx_path.value,
       "key": key.value,
       "my_wxid": my_wxid.value,
-    });
+    }
+    console.log(reqdata)
+    const body_data = await http.post('/api/init', reqdata);
     is_init.value = body_data.is_init;
     if (body_data.is_init) {
       percentage.value = 100; // 进度条 100%
     }
     emits('isAutoShow', body_data.is_init);
   } catch (error) {
+    percentage.value = 0; // 进度条 0%
     console.error('Error fetching data:', error);
+    ElMessage.error(error)
     return [];
   }
 }
@@ -154,7 +156,10 @@ watch(isAutoShow, (val) => {
           </el-table>
         </div>
         <div style="margin-top: 20px;">
-          <el-button style="margin-right: 10px;" @click="okWx">确定{{ oneWx }}</el-button>
+          <el-button style="margin-right: 10px;margin-top: 10px;width: 100%;" type="success" @click="okWx">确定{{
+              oneWx
+            }}
+          </el-button>
         </div>
       </div>
     </div>
@@ -162,19 +167,57 @@ watch(isAutoShow, (val) => {
 
     <!-- 用于自定义参数 -->
     <div v-else-if="isAutoShow==='custom'">
-      <el-button @click="init">确定2{{ isAutoShow }}</el-button>
+      <div
+          style="background-color: #fff; width: 70%;min-width: 800px; height: 70%; border-radius: 10px; padding: 20px; overflow: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 20px; font-weight: bold;">自定义-文件位置</div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <!--          <el-button style="margin-right: 10px;" @click="exportData">导出</el-button>-->
+          </div>
+        </div>
+        <div style="margin-top: 20px;">
+          <label>MicroMsg.db路径: </label>
+          <el-input placeholder="MicroMsg.db" v-model="micro_path" style="width: 50%;"></el-input>
+          <br>
+          <label>MSG.db路径: </label>
+          <el-input placeholder="MSG.db" v-model="msg_path" style="width: 50%;"></el-input>
+          <br>
+          <label>MediaMSG.db路径: </label>
+          <el-input placeholder="MediaMSG.db" v-model="media_path" style="width: 50%;"></el-input>
+          <br>
+          <label>微信文件夹路径: </label>
+          <el-input placeholder="C:\***\WeChat Files\wxid_*******" v-model="wx_path" style="width: 50%;"></el-input>
+          <br>
+          <label>微信原始id: </label>
+          <el-input placeholder="wxid_*******" v-model="my_wxid" style="width: 50%;"></el-input>
+          <br>
+          <label>密钥key(可空): </label>
+          <el-input placeholder="密钥key【64位，可为空，空表示上诉数据库已解密】" v-model="key"
+                    style="width: 50%;"></el-input>
+          <br>
+
+          <el-button style="margin-top: 10px;width: 50%;" type="success" @click="init">确定</el-button>
+          <!--    分割线    -->
+        </div>
+      </div>
     </div>
     <!-- END -->
 
     <!-- 初始选择界面 -->
-    <div v-else-if="isAutoShow === ''">
-      <label style="display: flex; flex-direction: column; align-items: center; margin-right: 20px;">
+    <div v-else-if="isAutoShow === ''" style="display: flex; justify-content: space-between;">
+      <label
+          style="width: 200px; height: 150px; background-color: #fff; display: flex; flex-direction: column; align-items: center; border-radius: 10px; margin-right: 20px;">
         <input type="radio" v-model="isAutoShow" value="auto"/>
-        自动解密并显示当前微信
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+          <div>自动解密已登录微信</div>
+        </div>
       </label>
-      <label style="display: flex; flex-direction: column; align-items: center;">
+      <label
+          style="width: 200px; height: 150px; background-color: #fff; display: flex; flex-direction: column; align-items: center; border-radius: 10px;">
         <input type="radio" v-model="isAutoShow" value="custom"/>
-        显示自定义文件
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+          <div>自定义文件位置</div>
+        </div>
       </label>
     </div>
     <!-- END -->
