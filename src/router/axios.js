@@ -35,13 +35,13 @@ http.interceptors.response.use(
     (response) => {
         // 对响应数据做点什么
         if (response.data.code === 0) {
-            // 如果后端返回的状态码是 200，说明接口请求成功
+            // 如果后端返回的状态码是0 ，说明接口请求成功
             // 这里直接返回后端返回的数据
             return response.data.body;
         } else {
             // 如果不是 200，说明接口请求失败，弹出后端给的错误提示
-            console.error('Error Message:', response.data.msg);
-            return Promise.reject(response.data.msg);
+            console.error('Error Message:', response.data);
+            return Promise.reject(response.data);
         }
     },
     (error) => {
@@ -57,8 +57,12 @@ http.interceptors.response.use(
             console.error('Error sending request:', error.message);
         }
 
-        // 把错误传递给调用者
-        return Promise.reject(error);
+        // 把url+参数+错误传递给调用者
+        return Promise.reject({
+            message: error.message,
+            url: error.config.url,
+            params: error.config.params
+        });
     }
 );
 export default http;
