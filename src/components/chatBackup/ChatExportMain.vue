@@ -60,13 +60,13 @@ const setting = {
     wxPathShow: false,
   },
   'json': {
-    brief: 'json-开发中',
+    brief: 'json',
     detail: "只包含文本，可用于数据分析，情感分析等方面。",
     userShow: true,
-    timeShow: true,
+    timeShow: false,
     chatTypeShow: false,
     keyShow: false,
-    wxPathShow: true,
+    wxPathShow: false,
   },
   'html': {
     brief: 'html-开发中',
