@@ -60,7 +60,7 @@ const setting = {
     wxPathShow: false,
   },
   'json': {
-    brief: 'json(只包含文字)-开发中',
+    brief: 'json-开发中',
     detail: "只包含文本，可用于数据分析，情感分析等方面。",
     userShow: true,
     timeShow: true,
