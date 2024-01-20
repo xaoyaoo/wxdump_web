@@ -25,6 +25,7 @@ const props = defineProps({
 const exportType = ref('');
 const datetime = ref([]);
 const chatType = ref(['文本']);
+const key = ref('');
 const wx_path = ref('');
 
 const Result = ref(''); // 用于显示返回值
@@ -32,27 +33,30 @@ const Result = ref(''); // 用于显示返回值
 
 const setting = {
   'endb': {
-    brief: '加密文件-开发中',
+    brief: '加密文件',
     detail: "导出的内容为微信加密数据库（）。\n可还原回微信,但会覆盖微信后续消息。",
     userShow: false,
     timeShow: false,
     chatTypeShow: false,
+    keyShow: false,
     wxPathShow: true,
   },
   'dedb': {
-    brief: '解密文件-开发中',
+    brief: '解密文件',
     detail: "导出的文件为解密后的sqlite数据库，并且会自动合并msg和media数据库为同一个，但是无法还原会微信。",
     userShow: false,
     timeShow: true,
     chatTypeShow: false,
-    wxPathShow: true,
+    keyShow: false,
+    wxPathShow: false,
   },
   'csv': {
     brief: 'csv(只包含文字)-开发中',
     detail: "只包含文本，但是可以用excel软件（wps，office）打开。",
     userShow: true,
-    timeShow: true,
+    timeShow: false,
     chatTypeShow: false,
+    keyShow: false,
     wxPathShow: false,
   },
   'json': {
@@ -61,6 +65,7 @@ const setting = {
     userShow: true,
     timeShow: true,
     chatTypeShow: false,
+    keyShow: false,
     wxPathShow: true,
   },
   'html': {
@@ -69,6 +74,7 @@ const setting = {
     userShow: true,
     timeShow: true,
     chatTypeShow: true,
+    keyShow: false,
     wxPathShow: true,
   },
   'pdf': {
@@ -77,6 +83,7 @@ const setting = {
     userShow: true,
     timeShow: true,
     chatTypeShow: true,
+    keyShow: false,
     wxPathShow: true,
   },
   'docx': {
@@ -85,6 +92,7 @@ const setting = {
     userShow: true,
     timeShow: true,
     chatTypeShow: true,
+    keyShow: false,
     wxPathShow: true,
   },
 };
@@ -116,12 +124,14 @@ const handDatetimeChildData = (val: any) => {
 const userShow = ref(false);
 const timeShow = ref(false);
 const chatTypeShow = ref(false);
+const keyShow = ref(false);
 const wxPathShow = ref(false);
 // 各个选项的说明
 watch(exportType, (val: string) => {
   userShow.value = setting[val].userShow;
   timeShow.value = setting[val].timeShow;
   chatTypeShow.value = setting[val].chatTypeShow;
+  keyShow.value = setting[val].keyShow;
   wxPathShow.value = setting[val].wxPathShow;
   Result.value = setting[val].detail;
 })
@@ -144,7 +154,7 @@ const exportData = async () => {
     Result.value = body_data;
   } catch (error) {
     console.error('Error fetching data:', error);
-    Result.value = String(error);
+    Result.value = String(error) + "\n更多信息请查看控制台；";
   }
 }
 </script>
@@ -213,6 +223,11 @@ const exportData = async () => {
                   <el-checkbox v-for="typeName in chatTypeAll" :key="typeName" :label="typeName">{{ typeName }}
                   </el-checkbox>
                 </el-checkbox-group>
+              </div>
+              <div v-if="keyShow">
+                ** 微信文件夹路径：
+                <el-input placeholder="密钥key[可为空]" v-model="key"
+                          style="width: 50%;"></el-input>
               </div>
               <div v-if="wxPathShow">
                 ** 微信文件夹路径：
