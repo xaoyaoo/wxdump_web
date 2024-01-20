@@ -51,7 +51,7 @@ const setting = {
     wxPathShow: false,
   },
   'csv': {
-    brief: 'csv(只包含文字)-开发中',
+    brief: 'csv',
     detail: "只包含文本，但是可以用excel软件（wps，office）打开。",
     userShow: true,
     timeShow: false,
