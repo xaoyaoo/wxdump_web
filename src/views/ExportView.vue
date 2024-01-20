@@ -38,12 +38,8 @@ const handleChildData = (val: any) => {
       </el-aside>
 
       <!--这是右边的具体聊天记录-->
-      <div v-if="userData.username != ''" style="height: calc(100vh);width: 100%;background-color: #d2d2fa;">
+      <div style="height: calc(100vh);width: 100%;background-color: #d2d2fa;">
         <ChatExportMain :userData="userData"/>
-      </div>
-
-      <div v-else style="width: 100%;height: 100%">
-        <HomeView/>
       </div>
       <!-- END 这是右边的具体聊天记录 -->
     </el-container>
