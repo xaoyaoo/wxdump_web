@@ -91,7 +91,7 @@ const exportData = async () => {
           <div style="margin-top: 20px;">
             导出类型:
             <el-select v-model="exportType" placeholder="请选择导出类型" style="width: 50%;">
-              <el-option label="加密文件(可还原回微信)-开发中" value="endb"></el-option>
+              <el-option label="加密文件(可还原回微信,但会覆盖)-开发中" value="endb"></el-option>
               <el-option label="解密文件-开发中" value="dedb"></el-option>
               <el-option label="csv(只包含文字)-开发中" value="csv"></el-option>
               <el-option label="json(只包含文字)-开发中" value="json"></el-option>
@@ -102,12 +102,12 @@ const exportData = async () => {
             <br><br>
             <div>
               选项:<br>
-              <div>
-                ① 时间(默认全部)：
+              <div v-if="exportType in ['csv','json']">
+                <strong>** 时间(默认全部)：</strong>
                 <DateTimeSelect @datetime="handDatetimeChildData"/>
               </div>
-              <div>
-                ② 消息类型：
+              <div v-if="exportType in ['csv','json']">
+                ** 消息类型：
                 <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选
                 </el-checkbox>
                 <el-checkbox-group v-model="chatType" @change="handleCheckedCitiesChange">
@@ -115,8 +115,8 @@ const exportData = async () => {
                   </el-checkbox>
                 </el-checkbox-group>
               </div>
-              <div>
-                ③ 微信文件夹路径：
+              <div v-if="exportType in ['csv','json']">
+                ** 微信文件夹路径：
                 <el-input placeholder="微信文件夹路径[可为空](eg: C:\****\WeChat Files\wxid_**** )" v-model="wx_path"
                           style="width: 50%;"></el-input>
               </div>
