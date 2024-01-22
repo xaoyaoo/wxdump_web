@@ -3,6 +3,7 @@ import {ref, defineProps, nextTick, watch} from 'vue';
 import ChatRecprdsHeader from "@/components/messages/ChatRecprdsHeader.vue";
 import DateTimeSelect from "@/components/utils/DateTimeSelect.vue";
 import http from '@/router/axios.js';
+import {type Action, ElMessage, ElMessageBox} from "element-plus";
 
 interface User {
   account: string
@@ -153,7 +154,15 @@ const exportData = async () => {
     });
     Result.value = body_data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    ElMessageBox.alert(error, 'error', {
+      confirmButtonText: '确认',
+      callback: (action: Action) => {
+        ElMessage({
+          type: 'error',
+          message: `action: ${action}`,
+        })
+      },
+    })
     Result.value = String(error) + "\n更多信息请查看控制台；";
   }
 }
