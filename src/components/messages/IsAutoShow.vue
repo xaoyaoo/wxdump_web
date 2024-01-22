@@ -150,8 +150,7 @@ watch(isAutoShow, (val) => {
     <!-- 自动解密和显示 -->
     <div v-if="isAutoShow==='auto'">
 
-      <el-progress v-if="decryping && !isErrorShow" show-text="加载中" type="dashboard" :percentage="percentage"
-                   :color="colors"/>
+      <el-progress v-if="decryping && !isErrorShow" type="dashboard" :percentage="percentage" :color="colors"/>
 
       <div v-else
            style="background-color: #fff; width: 90%;min-width: 800px; height: 80%; border-radius: 10px; padding: 20px; overflow: auto;">
