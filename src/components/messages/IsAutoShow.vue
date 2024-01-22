@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import http from "@/router/axios";
 import {defineEmits, onMounted, ref, watch} from "vue";
-import {ElTable, ElTableColumn,ElMessage} from "element-plus";
+import {ElTable, ElTableColumn, ElMessage, ElMessageBox} from "element-plus";
+import type {Action} from 'element-plus'
+
 interface wxinfo {
   pid: string;
   version: string;
@@ -26,9 +28,9 @@ const colors = [
 ]
 const last_time = ref(new Date().getTime());
 const updateProgress = () => {
-  console.log(percentage.value);
-  console.log(timeout.value);
-  console.log(last_time.value, new Date().getTime() - last_time.value);
+  if (isErrorShow.value) {
+    return;
+  }
   last_time.value = new Date().getTime();
 
   if (percentage.value >= 99) {
@@ -48,6 +50,7 @@ const wxinfoData = ref<wxinfo[]>([]);
 const oneWx = ref("");
 const decryping = ref(false);
 const isAutoShow = ref("");
+const isErrorShow = ref(false);
 
 const msg_path = ref("");
 const micro_path = ref("");
@@ -108,7 +111,6 @@ const init = async () => {
       "key": key.value,
       "my_wxid": my_wxid.value,
     }
-    console.log(reqdata)
     const body_data = await http.post('/api/init', reqdata);
     is_init.value = body_data.is_init;
     if (body_data.is_init) {
@@ -117,8 +119,17 @@ const init = async () => {
     emits('isAutoShow', body_data.is_init);
   } catch (error) {
     percentage.value = 0; // 进度条 0%
-    console.error('Error fetching data:', error);
-    ElMessage.error(error)
+    isErrorShow.value = true;
+    ElMessageBox.alert(error, 'error', {
+      confirmButtonText: '确认',
+      callback: (action: Action) => {
+        ElMessage({
+          type: 'error',
+          message: `action: ${action}`,
+        })
+      },
+    })
+    // console.error('Error fetching data:', error);
     return [];
   }
 }
@@ -139,7 +150,8 @@ watch(isAutoShow, (val) => {
     <!-- 自动解密和显示 -->
     <div v-if="isAutoShow==='auto'">
 
-      <el-progress v-if="decryping" show-text="加载中" type="dashboard" :percentage="percentage" :color="colors"/>
+      <el-progress v-if="decryping && !isErrorShow" show-text="加载中" type="dashboard" :percentage="percentage"
+                   :color="colors"/>
 
       <div v-else
            style="background-color: #fff; width: 90%;min-width: 800px; height: 80%; border-radius: 10px; padding: 20px; overflow: auto;">
