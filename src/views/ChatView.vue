@@ -44,7 +44,7 @@ const init = (child_init: boolean) => {
     <div v-else>
       <el-container>
         <!--  这是左边的list    -->
-        <el-aside width="266px" style="overflow-y: auto; height: calc(100vh);">
+        <el-aside width="auto" style="overflow-y: auto; height: calc(100vh);">
           <ContactsList @userData="handleChildData"/>
         </el-aside>
         <!-- END 这是左边的list -->
