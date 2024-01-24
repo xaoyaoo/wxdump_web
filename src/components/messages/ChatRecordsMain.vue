@@ -3,6 +3,7 @@ import {defineProps, ref, onMounted, watch, nextTick, defineExpose} from "vue";
 import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
+import MessageVideo from './MessageVideo.vue';
 import MessageAudio from './MessageAudio.vue';
 
 interface User {
@@ -216,6 +217,9 @@ defineExpose({
           <!-- 图片消息 -->
           <MessageImg v-else-if="msg.type_name == '图片'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                       :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageImg>
+          <!-- 视频消息 -->
+          <MessageVideo v-else-if="msg.type_name == '视频'" :is_sender="msg.is_sender" :direction="_direction(msg)"
+                      :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageVideo>
           <!-- 语音消息 -->
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                         :headUrl="get_head_url(msg)" :src="'api/'+msg.content.src" :msg="msg.content.msg"></MessageAudio>
