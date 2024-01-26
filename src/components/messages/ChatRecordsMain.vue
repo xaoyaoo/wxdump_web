@@ -4,6 +4,7 @@ import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
 import MessageAudio from './MessageAudio.vue';
+import MessageOther from "@/components/messages/MessageOther.vue";
 
 interface User {
   account: string
@@ -219,6 +220,10 @@ defineExpose({
           <!-- 语音消息 -->
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                         :headUrl="get_head_url(msg)" :src="'api/'+msg.content.src" :msg="msg.content.msg"></MessageAudio>
+          <!-- 其他消息 -->
+          <MessageOther v-else :is_sender="msg.is_sender" :direction="_direction(msg)" :headUrl="get_head_url(msg)"
+                        :content="msg.content.msg"></MessageOther>
+
         </div>
 
       </div>
