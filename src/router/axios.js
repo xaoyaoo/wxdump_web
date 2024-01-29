@@ -26,6 +26,7 @@ http.interceptors.request.use(
     },
     (error) => {
         // 对请求错误做些什么
+        console.log('Error Message:', error.message);
         return Promise.reject(error);
     }
 );
