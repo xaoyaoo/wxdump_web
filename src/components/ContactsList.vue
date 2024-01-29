@@ -89,7 +89,6 @@ const handleCurrentChange = (val: User | undefined) => {
         </template>
       </el-table-column>
       <el-table-column prop="chat_count" label="num" width="70"/>
-
     </el-table>
   </div>
 </template>
