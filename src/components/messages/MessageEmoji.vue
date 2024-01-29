@@ -77,8 +77,8 @@ const props = defineProps({
 const imgSrc = ref("");
 
 onMounted(() => {
-    console.log('load emoji')
-    console.log(props.src)
+    // console.log('load emoji')
+    // console.log(props.src)
   imgSrc.value = props.src;
 });
 
