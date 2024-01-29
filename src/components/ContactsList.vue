@@ -73,6 +73,15 @@ const handleCurrentChange = (val: User | undefined) => {
     <!--  这是联系人的list    -->
     <el-table :data="tableData" stripe style="width: 100%" max-height="100%" height="100%" highlight-current-row
               @current-change="handleCurrentChange">
+      <el-table-column>
+        <template v-slot="{ row }">
+          <el-avatar :size="40" :src=row.headImgUrl v-if="row.headImgUrl!==''">
+          </el-avatar>
+          <el-avatar :size="40" v-else>
+            群聊
+          </el-avatar>
+        </template>
+      </el-table-column>
       <el-table-column label="name" width="180">
         <template v-slot="{ row }">
           <span v-if="row.remark !== null && row.remark !== ''">{{ row.remark }}</span>

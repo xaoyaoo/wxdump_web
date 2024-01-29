@@ -3,7 +3,10 @@ import {defineProps, ref, onMounted, watch, nextTick, defineExpose} from "vue";
 import http from '@/router/axios.js';
 import MessageText from './MessageText.vue';
 import MessageImg from './MessageImg.vue';
+import MessageVideo from './MessageVideo.vue';
 import MessageAudio from './MessageAudio.vue';
+import MessageFile from './MessageFile.vue';
+import MessageEmoji from './MessageEmoji.vue'
 import MessageOther from "@/components/messages/MessageOther.vue";
 
 interface User {
@@ -217,6 +220,15 @@ defineExpose({
           <!-- 图片消息 -->
           <MessageImg v-else-if="msg.type_name == '图片'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                       :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageImg>
+           <!-- 表情消息 -->
+           <MessageEmoji v-else-if="msg.type_name == '动画表情'" :is_sender="msg.is_sender" :direction="_direction(msg)"
+                      :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageEmoji>
+          <!-- 视频消息 -->
+          <MessageVideo v-else-if="msg.type_name == '视频'" :is_sender="msg.is_sender" :direction="_direction(msg)"
+                      :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageVideo>
+           <!-- 文件消息 -->
+          <MessageFile v-else-if="msg.type_name == '文件'" :is_sender="msg.is_sender" :direction="_direction(msg)"
+                      :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageFile>
           <!-- 语音消息 -->
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                         :headUrl="get_head_url(msg)" :src="'api/'+msg.content.src" :msg="msg.content.msg"></MessageAudio>
