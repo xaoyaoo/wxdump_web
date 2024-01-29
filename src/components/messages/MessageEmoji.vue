@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import {defineProps, onMounted, ref} from "vue";
-import http from '@/router/axios.js';
 
 const props = defineProps({
   is_sender: {
