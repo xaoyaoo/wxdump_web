@@ -82,9 +82,7 @@ onMounted(async () => {
         file_info.file_size_unit = "mb";
     }
     file_info.file_size = Number(file_info_resp.file_size) / 1024;
-    // 字符串转float
-    // var file_size = file_info_resp.file_size/1024;
-   fileSrc.value = `http://127.0.0.1:5000/api/file/${props.src}`;
+    fileSrc.value = `http://127.0.0.1:5000/api/file/${props.src}`;
 
 });
 
