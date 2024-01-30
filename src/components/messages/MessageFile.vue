@@ -7,7 +7,7 @@
             <div class="info">
                 <p class="time">{{ direction }}</p>
                 <div style="float: left">
-                    <el-card shadow="hover" style="width:fit-content;">文件 ： <a :href="videoSrc" download>{{
+                    <el-card shadow="hover" style="width:fit-content;">文件 ： <a :href="fileSrc" download>{{
                         file_info.file_name }}</a>
                         <div>
                             文件大小：<span>{{ file_info.file_size }}{{ file_info.file_size_unit }}</span>
@@ -22,7 +22,7 @@
                 <p class="time">{{ direction }}</p>
 
                 <div style="float: right">
-                    <el-card shadow="hover" style="width:fit-content;">文件 ： <a :href="videoSrc" download>{{
+                    <el-card shadow="hover" style="width:fit-content;">文件 ： <a :href="fileSrc" download>{{
                         file_info.file_name }}</a>
                         <div>
                             文件大小：<span>{{ file_info.file_size }}{{ file_info.file_size_unit }}</span>
@@ -63,7 +63,7 @@ const props = defineProps({
         default: ''
     }
 })
-const videoSrc = ref("");
+const fileSrc = ref("");
 const file_info = reactive({
     file_name: String,
     file_size: Number,
@@ -84,7 +84,7 @@ onMounted(async () => {
     file_info.file_size = Number(file_info_resp.file_size) / 1024;
     // 字符串转float
     // var file_size = file_info_resp.file_size/1024;
-    videoSrc.value = `http://127.0.0.1:5000/api/file/${props.src}`;
+   fileSrc.value = `http://127.0.0.1:5000/api/file/${props.src}`;
 
 });
 

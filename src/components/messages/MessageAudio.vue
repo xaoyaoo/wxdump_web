@@ -26,25 +26,13 @@ const props = defineProps({
     default: ''
   },
 })
-// const audioSrc = ref("");
+const audioSrc = ref("");
 
-// onMounted(async () => {
-//   // audioSrc.value = await read_audio_base64(props.src);
-// });
-//
-// const read_audio_base64 = async (src: string) => {
-//
-//   // try {
-//   //   const body_data = await http.post('/api/audio', {
-//   //     'savePath': src,
-//   //   });
-//   //   return body_data;
-//   // } catch (error) {
-//   //   console.error('Error fetching data:', error);
-//   //   return "";
-//   // }
-//   return src;
-// }
+onMounted(async () => {
+  // audioSrc.value = await read_audio_base64(props.src);
+  audioSrc.value = `http://127.0.0.1:5000/api/audio/${props.src}`;
+});
+
 </script>
 
 <template>
@@ -57,7 +45,7 @@ const props = defineProps({
         <p class="time">{{ direction }}</p>
 
         <audio controls style="background-color:#fff ">
-          <source :src="src" type="audio/wav">
+          <source :src="audioSrc" type="audio/wav">
         </audio>
         <el-textarea
             :rows="1"
@@ -73,7 +61,7 @@ const props = defineProps({
         <p class="time">{{ direction }}</p>
 
         <audio controls style="background-color:#95EC69;">
-          <source :src="src" type="audio/wav">
+          <source :src="audioSrc" type="audio/wav">
         </audio>
         <el-textarea
             :rows="1"
