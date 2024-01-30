@@ -84,7 +84,7 @@ onMounted(async () => {
     file_info.file_size = Number(file_info_resp.file_size) / 1024;
     // 字符串转float
     // var file_size = file_info_resp.file_size/1024;
-    videoSrc.value = `http://127.0.0.1:5000/api/file/${props.src}`;
+    videoSrc.value = `/api/file/${props.src}`;
 
 });
 

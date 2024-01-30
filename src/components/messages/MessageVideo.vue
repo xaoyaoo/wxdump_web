@@ -60,7 +60,7 @@ const props = defineProps({
 const videoSrc = ref("");
 
 onMounted(async () => {
-  videoSrc.value = `http://127.0.0.1:5000/api/video/${props.src}`;
+  videoSrc.value = `/api/video/${props.src}`;
 });
 
 </script>
