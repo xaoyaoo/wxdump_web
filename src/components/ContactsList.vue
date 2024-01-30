@@ -44,6 +44,7 @@ const search_word = ref('');
 const search = async () => {
   try {
     const body_data = await req(0, 100, search_word.value);
+    // console.log(body_data);
     tableData.value = body_data;
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -57,6 +58,7 @@ const handleCurrentChange = (val: User | undefined) => {
   // 触发自定义事件，并传递数据
   if (val !== undefined) {
     // 处理user数据
+    // console.log(val);
     emits('userData', val);
   }
 }

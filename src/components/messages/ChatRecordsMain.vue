@@ -104,6 +104,7 @@ onMounted(fetchData); // 初始化时获取数据
 watch(() => props.userData.username, (newUsername, oldUsername) => {
   // 执行你的函数
   // 调用你想执行的函数
+  console.log('username changed', newUsername, oldUsername)
   messages.value = [];
   hasScrolledToTop.value = false;
   fetchData();
