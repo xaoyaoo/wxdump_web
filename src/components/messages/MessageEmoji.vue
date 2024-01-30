@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import {defineProps, onMounted, ref} from "vue";
-import http from '@/router/axios.js';
 
 const props = defineProps({
   is_sender: {
@@ -77,8 +76,8 @@ const props = defineProps({
 const imgSrc = ref("");
 
 onMounted(() => {
-    console.log('load emoji')
-    console.log(props.src)
+    // console.log('load emoji')
+    // console.log(props.src)
   imgSrc.value = props.src;
 });
 
