@@ -194,7 +194,7 @@ watch(init_type, (val) => {
         <div style="margin-top: 20px;">
           <!--    单选按钮      -->
           <input type="radio" v-model="isUseKey" value="true"> 使用 KEY [自动根据key解密微信文件夹下的数据库] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="radio" v-model="isUseKey" value="false"> 不使用 [表示数据库已解密]
+          <input type="radio" v-model="isUseKey" value="false"> 不使用 KEY [表示数据库已解密]
 
           <el-divider></el-divider>  <!-- 分割线-->
           <div v-if="isUseKey=='false'">
