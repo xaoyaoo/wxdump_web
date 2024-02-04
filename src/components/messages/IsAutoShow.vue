@@ -58,6 +58,7 @@ const media_path = ref("");
 const wx_path = ref("");
 const key = ref("");
 const my_wxid = ref("");
+const init_type = ref("");
 
 
 const emits = defineEmits(['isAutoShow']);
@@ -110,6 +111,7 @@ const init = async () => {
       "wx_path": wx_path.value,
       "key": key.value,
       "my_wxid": my_wxid.value,
+      "init_type": init_type.value,
     }
     const body_data = await http.post('/api/init', reqdata);
     is_init.value = body_data.is_init;
@@ -135,11 +137,13 @@ const init = async () => {
 }
 
 // 监测isAutoShow是否为aoto，如果是则执行get_wxinfo
-watch(isAutoShow, (val) => {
+watch(init_type, (val) => {
   if (val === 'auto') {
     get_wxinfo();
   } else if (val === 'custom') {
     // init();
+  } else if (val === 'last') {
+    init();
   }
 })
 
@@ -148,7 +152,7 @@ watch(isAutoShow, (val) => {
 <template>
   <div style="background-color: #d2d2fa; height: 100vh; display: flex; justify-content: center; align-items: center;">
     <!-- 自动解密和显示 -->
-    <div v-if="isAutoShow==='auto'">
+    <div v-if="init_type==='auto'">
 
       <el-progress v-if="decryping && !isErrorShow" type="dashboard" :percentage="percentage" :color="colors"/>
 
@@ -177,7 +181,7 @@ watch(isAutoShow, (val) => {
     <!-- END -->
 
     <!-- 用于自定义参数 -->
-    <div v-else-if="isAutoShow==='custom'">
+    <div v-else-if="init_type==='custom'">
       <div
           style="background-color: #fff; width: 70%;min-width: 800px; height: 70%; border-radius: 10px; padding: 20px; overflow: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -214,18 +218,29 @@ watch(isAutoShow, (val) => {
     </div>
     <!-- END -->
 
+    <!-- 上次数据 -->
+    <div v-else-if="init_type==='last'"></div>
+    <!-- END -->
+
     <!-- 初始选择界面 -->
-    <div v-else-if="isAutoShow === ''" style="display: flex; justify-content: space-between;">
+    <div v-else-if="init_type === ''" style="display: flex; justify-content: space-between;">
       <label
           style="width: 200px; height: 150px; background-color: #fff; display: flex; flex-direction: column; align-items: center; border-radius: 10px; margin-right: 20px;">
-        <input type="radio" v-model="isAutoShow" value="auto"/>
+        <input type="radio" v-model="init_type" value="last"/>
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+          <div>使用上次数据</div>
+        </div>
+      </label>
+      <label
+          style="width: 200px; height: 150px; background-color: #fff; display: flex; flex-direction: column; align-items: center; border-radius: 10px; margin-right: 20px;">
+        <input type="radio" v-model="init_type" value="auto"/>
         <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
           <div>自动解密已登录微信</div>
         </div>
       </label>
       <label
           style="width: 200px; height: 150px; background-color: #fff; display: flex; flex-direction: column; align-items: center; border-radius: 10px;">
-        <input type="radio" v-model="isAutoShow" value="custom"/>
+        <input type="radio" v-model="init_type" value="custom"/>
         <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
           <div>自定义文件位置</div>
         </div>
