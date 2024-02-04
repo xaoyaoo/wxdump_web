@@ -193,22 +193,22 @@ watch(init_type, (val) => {
         </div>
         <div style="margin-top: 20px;">
           <!--    单选按钮      -->
-          <input type="radio" v-model="isUseKey" value="true">使用 KEY [自动根据key解密微信文件夹下的数据库] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="radio" v-model="isUseKey" value="false">不使用 [表示数据库已解密]
-          <!--          分割线-->
-          <el-divider></el-divider>
+          <input type="radio" v-model="isUseKey" value="true"> 使用 KEY [自动根据key解密微信文件夹下的数据库] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="radio" v-model="isUseKey" value="false"> 不使用 [表示数据库已解密]
+
+          <el-divider></el-divider>  <!-- 分割线-->
           <div v-if="isUseKey=='false'">
-            <label>MicroMsg.db路径: </label>
+            <label>MicroMsg.db 路径: </label>
             <el-input placeholder="MicroMsg.db" v-model="micro_path" style="width: 80%;"></el-input>
             <br>
           </div>
           <div v-if="isUseKey=='false'">
-            <label>MSG.db路径: </label>
+            <label>MSG.db 路径: </label>
             <el-input placeholder="MSG.db" v-model="msg_path" style="width: 80%;"></el-input>
             <br>
           </div>
           <div v-if="isUseKey=='false'">
-            <label>MediaMSG.db路径: </label>
+            <label>MediaMSG.db 路径: </label>
             <el-input placeholder="MediaMSG.db" v-model="media_path" style="width: 80%;"></el-input>
             <br>
           </div>
@@ -224,8 +224,7 @@ watch(init_type, (val) => {
             <br>
           </div>
 
-          <el-button style="margin-top: 10px;width: 50%;" type="success" @click="init">确定</el-button>
-          <!--    分割线    -->
+          <el-button style="margin-top: 10px;width: 100%;" type="success" @click="init">确定</el-button>
         </div>
       </div>
     </div>
