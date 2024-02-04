@@ -220,7 +220,7 @@ watch(init_type, (val) => {
           <br>
           <div v-if="isUseKey=='true'">
             <label>密钥key(可空): </label>
-            <el-input placeholder="密钥key" v-model="key" style="width: 80%;"></el-input>
+            <el-input placeholder="密钥key (64位)" v-model="key" style="width: 80%;"></el-input>
             <br>
           </div>
 
