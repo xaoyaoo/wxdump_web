@@ -51,6 +51,7 @@ const oneWx = ref("");
 const decryping = ref(false);
 const isAutoShow = ref("");
 const isErrorShow = ref(false);
+const isUseKey = ref("false");
 
 const msg_path = ref("");
 const micro_path = ref("");
@@ -183,7 +184,7 @@ watch(init_type, (val) => {
     <!-- 用于自定义参数 -->
     <div v-else-if="init_type==='custom'">
       <div
-          style="background-color: #fff; width: 70%;min-width: 800px; height: 70%; border-radius: 10px; padding: 20px; overflow: auto;">
+          style="background-color: #fff; width: 80%;min-width: 800px; height: 70%; border-radius: 10px; padding: 20px; overflow: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div style="font-size: 20px; font-weight: bold;">自定义-文件位置</div>
           <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -191,25 +192,37 @@ watch(init_type, (val) => {
           </div>
         </div>
         <div style="margin-top: 20px;">
-          <label>MicroMsg.db路径: </label>
-          <el-input placeholder="MicroMsg.db" v-model="micro_path" style="width: 50%;"></el-input>
-          <br>
-          <label>MSG.db路径: </label>
-          <el-input placeholder="MSG.db" v-model="msg_path" style="width: 50%;"></el-input>
-          <br>
-          <label>MediaMSG.db路径: </label>
-          <el-input placeholder="MediaMSG.db" v-model="media_path" style="width: 50%;"></el-input>
-          <br>
+          <!--    单选按钮      -->
+          <input type="radio" v-model="isUseKey" value="true">使用 KEY [自动根据key解密微信文件夹下的数据库] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="radio" v-model="isUseKey" value="false">不使用 [表示数据库已解密]
+          <!--          分割线-->
+          <el-divider></el-divider>
+          <div v-if="isUseKey=='false'">
+            <label>MicroMsg.db路径: </label>
+            <el-input placeholder="MicroMsg.db" v-model="micro_path" style="width: 80%;"></el-input>
+            <br>
+          </div>
+          <div v-if="isUseKey=='false'">
+            <label>MSG.db路径: </label>
+            <el-input placeholder="MSG.db" v-model="msg_path" style="width: 80%;"></el-input>
+            <br>
+          </div>
+          <div v-if="isUseKey=='false'">
+            <label>MediaMSG.db路径: </label>
+            <el-input placeholder="MediaMSG.db" v-model="media_path" style="width: 80%;"></el-input>
+            <br>
+          </div>
           <label>微信文件夹路径: </label>
-          <el-input placeholder="C:\***\WeChat Files\wxid_*******" v-model="wx_path" style="width: 50%;"></el-input>
+          <el-input placeholder="C:\***\WeChat Files\wxid_*******" v-model="wx_path" style="width: 80%;"></el-input>
           <br>
           <label>微信原始id: </label>
-          <el-input placeholder="wxid_*******" v-model="my_wxid" style="width: 50%;"></el-input>
+          <el-input placeholder="wxid_*******" v-model="my_wxid" style="width: 80%;"></el-input>
           <br>
-          <label>密钥key(可空): </label>
-          <el-input placeholder="密钥key【64位，可为空，空表示上诉数据库已解密】" v-model="key"
-                    style="width: 50%;"></el-input>
-          <br>
+          <div v-if="isUseKey=='true'">
+            <label>密钥key(可空): </label>
+            <el-input placeholder="密钥key" v-model="key" style="width: 80%;"></el-input>
+            <br>
+          </div>
 
           <el-button style="margin-top: 10px;width: 50%;" type="success" @click="init">确定</el-button>
           <!--    分割线    -->
