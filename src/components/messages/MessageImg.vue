@@ -10,11 +10,11 @@
         <div class="demo-image__preview">
           <el-image
               style="max-width: 150px; max-height: 150px"
-              :src="imgSrc"
+              :src="src"
               :zoom-rate="1.2"
               :max-scale="7"
               :min-scale="0.2"
-              :preview-src-list="[imgSrc]"
+              :preview-src-list="[src]"
               :initial-index="4"
               fit="cover"
           />
@@ -30,11 +30,11 @@
         <div class="demo-image__preview">
           <el-image
               style="max-width: 150px; max-height: 150px"
-              :src="imgSrc"
+              :src="src"
               :zoom-rate="1.2"
               :max-scale="7"
               :min-scale="0.2"
-              :preview-src-list="[imgSrc]"
+              :preview-src-list="[src]"
               :initial-index="4"
               fit="cover"
           />
@@ -73,23 +73,7 @@ const props = defineProps({
     default: ''
   }
 })
-const imgSrc = ref("");
 
-onMounted(async () => {
-  imgSrc.value = await read_img_base64(props.src);
-});
-const read_img_base64 = async (src: string) => {
-
-  try {
-    const body_data = await http.post('/api/img', {
-      'img_path': src,
-    });
-    return body_data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return "";
-  }
-}
 </script>
 
 <style scoped lang="scss">

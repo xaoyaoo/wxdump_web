@@ -220,7 +220,7 @@ defineExpose({
                        :headUrl="get_head_url(msg)" :content="msg.content.msg"></MessageText>
           <!-- 图片消息 -->
           <MessageImg v-else-if="msg.type_name == '图片'" :is_sender="msg.is_sender" :direction="_direction(msg)"
-                      :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageImg>
+                      :headUrl="get_head_url(msg)" :src="'/api/img?img_path='+msg.content.src"></MessageImg>
            <!-- 表情消息 -->
            <MessageEmoji v-else-if="msg.type_name == '动画表情'" :is_sender="msg.is_sender" :direction="_direction(msg)"
                       :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageEmoji>
