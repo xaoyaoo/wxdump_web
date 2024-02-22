@@ -15,11 +15,14 @@
     "axios": "^1.6.3",
     "cors": "^2.8.5",
     "element-plus": "^2.4.4",
+    "markdown-it": "^14.0.0",
     "vue": "^3.3.11",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vue3-markdown-it": "^1.0.10"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
+    "@types/markdown-it": "^13.0.7",
     "@types/node": "^18.19.3",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
