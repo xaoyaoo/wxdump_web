@@ -1,7 +1,11 @@
 <template>
   <div class="about">
     <h1 id="-center-pywxdump-center-" style="text-align: center">
-      PyWxDump
+      PyWxDump<a @click="check_update" target="_blank" style="float: right; margin-right: 30px;">检查更新</a>
+    </h1>
+<!--  在右上角添加按钮， “检查更新”  -->
+    <h1 >
+
     </h1>
 
     <Markdown :source="source" />
@@ -10,6 +14,32 @@
 
 <script setup lang="ts">
 import Markdown from 'vue3-markdown-it';
+import http from '@/router/axios.js';
+import {type Action, ElMessage, ElMessageBox} from "element-plus";
+const check_update = async () => {
+  try {
+
+    const body_data = await http.post('/api/check_update');
+    const latest_version = body_data.latest_version;
+    const msg = body_data.msg;
+    const url = body_data.latest_url;
+    const showtext = `${msg}：${latest_version} \n ${url||''}`;
+
+    ElMessageBox.alert(showtext, 'info', {
+      confirmButtonText: '确认',
+      callback: (action: Action) => {
+        ElMessage({
+          type: 'info',
+          message: `action: ${action}`,
+        })
+      },
+    })
+  } catch (error) {
+    // console.error('Error fetching data:', error);
+    return [];
+  }
+}
+
 
 const source = `
 [![Python](https://img.shields.io/badge/Python-3-blue.svg)](https://www.python.org/)
@@ -106,12 +136,7 @@ qq交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 
 ## 5. Star History
 
-<details>
-<summary>click to expand</summary>
-
 [![Star History Chart](https://api.star-history.com/svg?repos=xaoyaoo/pywxdump&type=Date)](https://star-history.com/#xaoyaoo/pywxdump&Date)
-
-</details>
 
 # 二、使用说明
 
@@ -129,15 +154,15 @@ qq交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 
 # 三、免责声明（非常重要！！！！！！！）
 
-本项目仅供学习交流使用，请勿用于非法用途，否则后果自负。
+* 本项目仅供学习交流使用，请勿用于非法用途，否则后果自负。
 
-您应该在下载保存，编译使用本项目的24小时内，删除本项目的源代码和（编译出的）程序。
+* 您应该在下载保存，编译使用本项目的24小时内，删除本项目的源代码和（编译出的）程序。
 
-本项目仅允许在授权情况下对数据库进行备份，严禁用于非法目的，否则自行承担所有相关责任。
+* 本项目仅允许在授权情况下对数据库进行备份，严禁用于非法目的，否则自行承担所有相关责任。
 
-下载、保存、进一步浏览源代码或者下载安装、编译使用本程序，表示你同意本警告，并承诺遵守它;
+* 下载、保存、进一步浏览源代码或者下载安装、编译使用本程序，表示你同意本警告，并承诺遵守它;
 
-请勿利用本项目的相关技术从事非法测试，如因此产生的一切不良后果与项目作者无关。
+* 请勿利用本项目的相关技术从事非法测试，如因此产生的一切不良后果与项目作者无关。
 
 # 四、致谢
 
@@ -168,7 +193,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
 `;
 </script>
 
