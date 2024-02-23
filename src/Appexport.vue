@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {defineProps, ref, onMounted, watch, nextTick, defineExpose} from "vue";
 import http from '@/router/axios.js';
-import MessageText from  '@/components/messages/MessageText.vue';
+import MessageText from '@/components/messages/MessageText.vue';
 import MessageImg from '@/components/messages/MessageImg.vue';
 import MessageVideo from '@/components/messages/MessageVideo.vue';
 import MessageAudio from '@/components/messages/MessageAudio.vue';
@@ -87,63 +87,31 @@ const hasScrolledToTop = ref(false);
 // 在组件挂载后加载 JSON 文件
 onMounted(async () => {
   try {
-    const response = await fetch('@/assets/data.json');
-    if (!response.ok) {
+    const response1 = await fetch('./data/userdata.json');
+    if (!response1.ok) {
       throw new Error('Failed to load JSON file');
     }
-    const data = await response.json();
-    items.value = data.items; // 假设 JSON 文件的结构为 { "items": [...] }
+
+    console.log(response1);
+    console.log("response1")
+    const data1 = await response1.json();
+    console.log(data1);
+    userData.value = data1.myUserData;
+    userlist.value = data1.userlist;
+
+    const response2 = await fetch('./data/data.json');
+    console.log(response2);
+    if (!response2.ok) {
+      throw new Error('Failed to load JSON file');
+    }
+     messages.value =  await response2.json();
+
+
   } catch (error) {
     console.error('Error loading JSON file:', error);
   }
 });
-
-const req = async (start: number, limit: number, username: string) => {
-  try {
-    const body_data = await http.post('/api/msgs', {
-      'start': start,
-      'limit': limit,
-      'wxid': username,
-    });
-    messages.value = body_data.msg_list;
-    userlist.value = body_data.user_list;
-    my_wxid.value = body_data.my_wxid;
-
-    return body_data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
-}
-
-const fetchData = async () => {
-  try {
-    start.value = userData.value.chat_count - limit.value;
-    await req(start.value, limit.value, userData.value.username);
-    if (!hasScrolledToTop.value) {
-      await nextTick(() => {
-        setScrollTop();
-        hasScrolledToTop.value = false;
-      });
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
-};
 // END 获取聊天记录
-
-onMounted(fetchData); // 初始化时获取数据
-
-// 监听 userData 中 username 的变化
-watch(() => userData.value.username, (newUsername, oldUsername) => {
-  // 执行你的函数
-  // 调用你想执行的函数
-  console.log('username changed', newUsername, oldUsername)
-  messages.value = [];
-  hasScrolledToTop.value = false;
-  fetchData();
-});
 
 // 这部分为构造消息的发送时间和头像
 const _direction = (msg: any) => {
@@ -234,9 +202,11 @@ const loadMore = async () => {
     updateScrollTop()
   })
 };
+
 defineExpose({
   loadMore
 })
+
 </script>
 
 <template>
@@ -267,7 +237,8 @@ defineExpose({
                        :headUrl="get_head_url(msg)" :src="msg.content.src"></MessageFile>
           <!-- 语音消息 -->
           <MessageAudio v-else-if="msg.type_name == '语音'" :is_sender="msg.is_sender" :direction="_direction(msg)"
-                        :headUrl="get_head_url(msg)" :src="'/api/'+msg.content.src" :msg="msg.content.msg"></MessageAudio>
+                        :headUrl="get_head_url(msg)" :src="'/api/'+msg.content.src"
+                        :msg="msg.content.msg"></MessageAudio>
           <!-- 其他消息 -->
           <MessageOther v-else :is_sender="msg.is_sender" :direction="_direction(msg)" :headUrl="get_head_url(msg)"
                         :content="msg.content.msg"></MessageOther>
