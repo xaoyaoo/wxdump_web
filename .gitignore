@@ -31,4 +31,4 @@ coverage
 tsconfig.app.tsbuildinfo
 tsconfig.node.tsbuildinfo
 
-/src/assets/data/
+/public/data/
