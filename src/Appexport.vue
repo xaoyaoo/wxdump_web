@@ -37,34 +37,6 @@ interface msg {
   MsgSvrID: string
 }
 
-
-const scrollbarRef = ref(null);
-const chatRecordsMainRef = ref(null);
-const scrollTop = ref(0);
-const scrollHeight = ref(0);
-const setScrollTop = () => {
-  nextTick(() => {
-    if (scrollbarRef.value) {
-      // 假设el-scrollbar在DOM中是一个具体的元素
-      const target = scrollbarRef.value.$el.children[0];
-      if (target) {
-        target.scrollTop = target.scrollHeight;
-        scrollHeight.value = target.scrollHeight;
-      }
-    }
-  });
-};
-
-const updateScrollTop = () => {
-  const target = scrollbarRef.value.$el.children[0];
-  if (target) {
-    const lastScrollHeight = scrollHeight.value;
-    const heightDiff = target.scrollHeight - lastScrollHeight;
-    target.scrollTop = target.scrollTop + heightDiff;
-    scrollHeight.value = target.scrollHeight;
-  }
-}
-
 const userData = ref<User>({
   account: '',
   describe: '',
@@ -81,7 +53,6 @@ const userlist = ref<UserList>({});
 const my_wxid = ref('');
 const limit = ref(50);
 const start = ref(0);
-const hasScrolledToTop = ref(false);
 
 // 获取聊天记录
 // 在组件挂载后加载 JSON 文件
@@ -106,7 +77,6 @@ onMounted(async () => {
     }
      messages.value =  await response2.json();
 
-
   } catch (error) {
     console.error('Error loading JSON file:', error);
   }
@@ -114,11 +84,11 @@ onMounted(async () => {
 // END 获取聊天记录
 
 // 这部分为构造消息的发送时间和头像
-const _direction = (msg: any) => {
+const _direction = (msg:any) => {
   if (msg.talker == '我') {
     msg.talker = my_wxid.value;
   }
-  const sendname = (msg) => {
+  const sendname = (msg:any) => {
     if (!userlist.value.hasOwnProperty(msg.talker)) {
       return msg.talker;
     }
@@ -169,14 +139,14 @@ const loadMore = async () => {
   });
   userlist.value = Object.assign(userlist.value, body_data.user_list);
 
-  await nextTick(() => {
-    updateScrollTop()
-  })
+  // await nextTick(() => {
+  //   updateScrollTop()
+  // })
 };
 
-defineExpose({
-  loadMore
-})
+// defineExpose({
+//   loadMore
+// })
 
 </script>
 
