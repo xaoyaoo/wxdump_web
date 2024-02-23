@@ -70,13 +70,13 @@ const setting = {
     wxPathShow: false,
   },
   'html': {
-    brief: 'html-开发中',
+    brief: 'html-测试中',
     detail: "主要用于浏览器可视化查看。",
     userShow: true,
-    timeShow: true,
-    chatTypeShow: true,
+    timeShow: false,
+    chatTypeShow: false,
     keyShow: false,
-    wxPathShow: true,
+    wxPathShow: false,
   },
   'pdf': {
     brief: 'pdf-开发中',
