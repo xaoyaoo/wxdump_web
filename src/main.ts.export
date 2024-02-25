@@ -6,13 +6,13 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import Markdown from 'vue3-markdown-it';
 
-import App from './App.vue'
-import router from './router'
-const app = createApp(App)
-app.use(router)
+// import App from './App.vue'
+// import router from './router'
+// const app = createApp(App)
+// app.use(router)
 
-// import Appexport from "@/Appexport.vue";
-// const app = createApp(Appexport)
+import Appexport from "@/Appexport.vue";
+const app = createApp(Appexport)
 
 app.use(ElementPlus)
 app.use(Markdown)
