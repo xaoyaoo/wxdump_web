@@ -1,18 +1,19 @@
 import './assets/main.css'
 
 import {createApp} from 'vue'
-import App from './App.vue'
-import Appexport from "@/Appexport.vue";
 
-import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import Markdown from 'vue3-markdown-it';
 
-const app = createApp(App)
-// const app = createApp(Appexport)
+// import App from './App.vue'
+// import router from './router'
+// const app = createApp(App)
+// app.use(router)
 
-app.use(router)
+import Appexport from "@/Appexport.vue";
+const app = createApp(Appexport)
+
 app.use(ElementPlus)
 app.use(Markdown)
 
