@@ -44,7 +44,7 @@ const setting = {
   },
   'dedb': {
     brief: '解密文件',
-    detail: "导出的文件为解密后的sqlite数据库，并且会自动合并msg和media数据库为同一个，但是无法还原会微信。",
+    detail: "导出的文件为解密后的sqlite数据库，并且会自动合并msg和media数据库为同一个，但是无法还原回微信。",
     userShow: false,
     timeShow: true,
     chatTypeShow: false,

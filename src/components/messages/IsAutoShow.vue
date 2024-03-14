@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" xmlns="http://www.w3.org/1999/html">
 import http from "@/router/axios";
 import {defineEmits, onMounted, ref, watch} from "vue";
 import {ElTable, ElTableColumn, ElMessage, ElMessageBox} from "element-plus";
@@ -193,8 +193,14 @@ watch(init_type, (val) => {
         </div>
         <div style="margin-top: 20px;">
           <!--    单选按钮      -->
-          <input type="radio" v-model="isUseKey" value="true"> 使用 KEY [自动根据key解密微信文件夹下的数据库] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="radio" v-model="isUseKey" value="false"> 不使用 KEY [表示数据库已解密]
+          <input type="radio" v-model="isUseKey" value="true"/> 使用 KEY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="radio" v-model="isUseKey" value="false"/> 不使用 KEY
+          <div v-if="isUseKey=='false'">
+            说明：1、表示数据库已解密  &nbsp; &nbsp;2、若使用导出后的merge数据库，则db路径写这个即可
+          </div>
+          <div v-if="isUseKey=='true'">
+             说明：自动根据key解密微信文件夹下的数据库
+          </div>
 
           <el-divider></el-divider>  <!-- 分割线-->
           <div v-if="isUseKey=='false'">
