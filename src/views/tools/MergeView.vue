@@ -30,7 +30,7 @@ const decrypt = async () => {
         </div>
       </div>
       <div style="margin-top: 20px;">
-        <label>密钥（key）: </label>
+        <label>数据库路径: </label>
         <el-input placeholder="数据库路径（文件夹，并且确保文件夹下的db文件已经解密）：" v-model="dbPath" style="width: 50%;"></el-input>
         <br>
         <label>微信数据库路径: </label>
