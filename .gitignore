@@ -32,3 +32,5 @@ tsconfig.app.tsbuildinfo
 tsconfig.node.tsbuildinfo
 
 /public/data/
+package-lock.json
+.cursor/rules/fe.mdc

@@ -136,66 +136,145 @@ const export_button = (val: boolean) => {
 </script>
 
 <template>
+  <el-card class="chat-header-card" shadow="hover">
+    <div class="header-content">
+      <div class="info-section">
+        <div class="info-item">
+          <span class="label">wxid:</span>
+          <el-tag class="value" size="small" effect="plain">{{ userinfo?.wxid }}</el-tag>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">名称:</span>
+          <el-tag class="value" size="small" effect="plain">{{ gen_show_name(userinfo) }}</el-tag>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">消息数量:</span>
+          <el-tag class="value" size="small" type="info" effect="plain">{{ msg_count }}</el-tag>
+        </div>
+      </div>
 
-  <el-row :gutter="5" style="width: 100%;">
-    <el-col :span="6" style="white-space: nowrap;">
-      <el-text class="label_color mx-1" truncated>wxid:</el-text>&ensp;
-      <el-text class="data_color mx-1" truncated :title="userinfo?.wxid">{{ userinfo?.wxid }}</el-text>
-    </el-col>
-    <el-col :span="6" style="white-space: nowrap;">
-      <el-text class="label_color mx-1" truncated>名称:</el-text>&ensp;
-      <el-text class="data_color mx-1" truncated title="show_name">{{ gen_show_name(userinfo) }}</el-text>
-    </el-col>
-    <el-col :span="5" style="white-space: nowrap;">
-      <el-text class="label_color mx-1" truncated>数量:</el-text>&ensp;
-      <el-text class="data_color mx-1" truncated :title="msg_count">{{ msg_count }}</el-text>
-    </el-col>
-    <el-col :span="2" style="white-space: nowrap;">
-      <el-text class="button_color mx-1 underline" truncated @click="is_show_more=!is_show_more"> 详细信息</el-text>
-    </el-col>
-    <el-col :span="2" style="white-space: nowrap;">
-      <el-text v-if="!is_export" class="button_color mx-1 underline" truncated @click="export_button(true);">导出备份
-      </el-text>
-      <el-text v-if="is_export" class="button_color mx-1 underline" truncated @click="export_button(false);">聊天查看
-      </el-text>
-    </el-col>
-    <el-col :span="3" style="white-space: nowrap;">
-      <el-text class="button_color mx-1 underline" truncated @click="get_real_time_msg();">实时消息
-        <template v-if="is_getting_real_time_msg" style="color: #00bd7e">...</template>
-      </el-text>
-    </el-col>
-  </el-row>
+      <div class="action-section">
+        <el-button 
+          type="primary" 
+          link 
+          @click="is_show_more=!is_show_more"
+          :icon="is_show_more ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
+        >
+          详细信息
+        </el-button>
 
-  <el-dialog v-model="is_show_more" title="详细信息" width="600" center>
-    <user-info-show :userinfo="userinfo" :show_all="true"></user-info-show>
-  </el-dialog>
+        <el-button 
+          type="primary" 
+          link 
+          @click="export_button(!is_export)"
+        >
+          {{ is_export ? '聊天查看' : '导出备份' }}
+        </el-button>
+
+        <el-button 
+          type="primary" 
+          link 
+          @click="get_real_time_msg()"
+          :loading="is_getting_real_time_msg"
+        >
+          实时消息
+        </el-button>
+      </div>
+    </div>
+
+    <el-dialog 
+      v-model="is_show_more" 
+      title="详细信息" 
+      width="600" 
+      center
+      class="info-dialog"
+    >
+      <user-info-show :userinfo="userinfo" :show_all="true"></user-info-show>
+    </el-dialog>
+  </el-card>
 </template>
 
 <style scoped>
-.label_color {
-  color: #333; /* 调整字体颜色 */
-  font-size: 15px;
-  padding-left: 15px;
-  padding-right: 0;
+.chat-header-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
 }
 
-.data_color {
-  color: #08488c;
-  background-color: #f4f4f4; /* 调整背景颜色 */
-  font-size: 15px;
-  padding-left: 6px;
-  padding-right: 6px;
-  font-weight: bold; /* 使用 bold 表示加粗 */
-  white-space: nowrap;
-  max-width: 80%;
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.button_color {
-  color: #0048ff; /* 调整字体颜色 */
-  font-size: 15px;
-  padding-left: 15px;
-  padding-right: 0;
-  text-decoration: underline;
+.info-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
 }
 
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  color: #606266;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.value {
+  font-size: 14px;
+  padding: 0 8px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.action-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+:deep(.el-button--link) {
+  padding: 0 8px;
+  height: 24px;
+  font-size: 14px;
+}
+
+:deep(.el-button--link:hover) {
+  color: #409EFF;
+}
+
+:deep(.el-dialog) {
+  border-radius: 8px;
+}
+
+:deep(.el-dialog__header) {
+  padding: 20px;
+  margin: 0;
+  border-bottom: 1px solid #ebeef5;
+}
+
+:deep(.el-dialog__body) {
+  padding: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .action-section {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
 </style>

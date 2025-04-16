@@ -14,13 +14,13 @@ import FavoriteIcon from "@/assets/icon/FavoriteIcon.vue";
 import CollapseOpenIcon from "@/assets/icon/CollapseOpenIcon.vue";
 import CollapseCloseIcon from "@/assets/icon/CollapseCloseIcon.vue";
 
-import {RouterLink, RouterView} from 'vue-router'
-import {ref, onMounted, withCtx, watch} from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import { ref, onMounted, withCtx, watch } from 'vue'
 import router from "@/router";
-import {is_db_init, is_use_local_data} from "@/utils/common_utils";
+import { is_db_init, is_use_local_data } from "@/utils/common_utils";
 import ChatRecordsMain from "@/components/chat/ChatRecordsMain.vue";
 
-const isCollapse = ref(true);
+const isCollapse = ref(false);
 
 const is_local_data = ref(true);
 
@@ -28,7 +28,7 @@ onMounted(() => {
   // localStorage.setItem('isDbInit', "t");
   is_local_data.value = localStorage.getItem('isUseLocalData') === 't';
   console.log("is_local_data", is_local_data.value);
-  if(!is_local_data.value) {
+  if (!is_local_data.value) {
     is_db_init();
   }
 })
@@ -46,24 +46,24 @@ const handleClose = (key: string, keyPath: string[]) => {
 
 <template>
   <div class="export-main" v-if="is_local_data">
-    <chat-records-main wxid="wxid_test"/>
+    <chat-records-main wxid="wxid_test" />
   </div>
   <div id="appbg" v-else>
     <el-container class="layout-container-demo" style="height: 100%;background:none;">
       <el-aside :width="isCollapse ? '64px' : '160px'">
         <el-container class="sidebar-container">
           <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse" :router='true'
-                   :collapse-transition="false" :show-timeout="0" :hide-timeout="0">
+            :collapse-transition="true" :show-timeout="200" :hide-timeout="200">
 
-            <el-radio-group v-model="isCollapse"
-                            style="margin-bottom: 20px;margin-top: 10px;margin-left: 10px;max-height: 30px">
-              <el-radio-button :label="false" v-if="isCollapse">
-                <collapse-open-icon></collapse-open-icon>
-              </el-radio-button>
-              <el-radio-button :label="true" v-else>
-                <collapse-close-icon></collapse-close-icon>
-              </el-radio-button>
-            </el-radio-group>
+            <div class="collapse-btn-container">
+              <el-button 
+                class="collapse-btn" 
+                :icon="isCollapse ? CollapseOpenIcon : CollapseCloseIcon" 
+                @click="isCollapse = !isCollapse"
+                circle
+                plain
+              />
+            </div>
 
             <el-menu-item index='/home'>
               <home-icon></home-icon>
@@ -108,7 +108,7 @@ const handleClose = (key: string, keyPath: string[]) => {
           </el-menu>
 
           <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
-                   @close="handleClose" :router='true'>
+            @close="handleClose" :router='true'>
             <el-menu-item index='/about'>
               <about-icon></about-icon>
               <template #title>关于我们</template>
@@ -126,7 +126,7 @@ const handleClose = (key: string, keyPath: string[]) => {
       </el-aside>
 
       <el-main>
-        <RouterView/>
+        <RouterView />
       </el-main>
 
     </el-container>
@@ -134,7 +134,6 @@ const handleClose = (key: string, keyPath: string[]) => {
 </template>
 
 <style scoped>
-
 .export-main {
   position: absolute;
   top: 0;
@@ -217,5 +216,45 @@ header {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+}
+
+.collapse-btn-container {
+  position: absolute;
+  right: 0px;
+  top: 350px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.collapse-btn {
+  transition: all 0.3s;
+  font-size: 12px;
+  padding: 6px;
+  width: 26px;
+  height: 26px;
+  background-color: var(--el-bg-color);
+  border: 1px solid var(--el-border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collapse-btn :deep(.el-icon) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collapse-btn:hover {
+  transform: scale(1.1);
+  background-color: var(--el-color-primary-light-9);
+  border-color: var(--el-color-primary);
+}
+
+.collapse-btn:active {
+  transform: scale(0.95);
 }
 </style>

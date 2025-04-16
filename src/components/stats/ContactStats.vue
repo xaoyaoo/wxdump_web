@@ -7,6 +7,7 @@ import {gen_show_name, type User} from "@/utils/common_utils";
 import DateTimeSelect from "@/components/utils/DateTimeSelect.vue";
 import ColorSelect from "@/components/utils/ColorSelect.vue";
 import ChartInit from "@/components/stats/components/ChartInit.vue";
+import { ElMessage } from 'element-plus';
 
 
 // https://echarts.apache.org/examples/en/editor.html
@@ -18,7 +19,11 @@ interface gender_face {
 }
 
 const user = ref<{ [key: string]: User }>({});
-const gender_data = ref<gender_face>({});
+const gender_data = ref<gender_face>({
+  男: 0,
+  女: 0,
+  未知: 0
+});
 const signature_count_dict = ref<{ [key: string]: number }>({});
 
 const is_update = ref(false);
@@ -149,25 +154,159 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="common-layout" style="background-color: #d2d2fa;height: 100%;width: 100%;">
-    <el-container style="height: 100%;width: 100%;">
-      <el-header :height="'80px'" style="width: 100%;">
-        <strong>颜色设置：</strong>
-        bg:
-        <color-select
-            @updateColors="(val:any)=>{val?chart_option.backgroundColor=val:'';refreshChart(false)}"></color-select>
-      </el-header>
+  <div class="contact-container">
+    <el-card class="contact-card">
+      <template #header>
+        <div class="card-header">
+          <span class="title">联系人画像</span>
+        </div>
+      </template>
 
-      <el-main style="height: calc(100% - 100px);width: 100%;">
-        <chart-init :option="chart_option" :update="is_update" class="charts_main"/>
-      </el-main>
-    </el-container>
+      <div class="content">
+        <div class="control-panel">
+          <div class="control-group">
+            <div class="control-item">
+              <span class="label">背景色：</span>
+              <color-select
+                @updateColors="(val:any)=>{val?chart_option.backgroundColor=val:'';refreshChart(false)}"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-info">
+          <div class="gender-stats">
+            <div class="stat-item">
+              <span class="stat-label">男性：</span>
+              <span class="stat-value">{{ gender_data["男"] }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">女性：</span>
+              <span class="stat-value">{{ gender_data["女"] }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">未知：</span>
+              <span class="stat-value">{{ gender_data["未知"] }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">总计：</span>
+              <span class="stat-value">{{ gender_data["男"] + gender_data["女"] + gender_data["未知"] }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <chart-init :option="chart_option" :update="is_update"/>
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <style scoped>
-.charts_main {
+.contact-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-card {
+  width: 95%;
+  max-width: 1200px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #303133;
+}
+
+.content {
+  padding: 20px;
+}
+
+.control-panel {
+  margin-bottom: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.label {
+  font-weight: bold;
+  color: #606266;
+  white-space: nowrap;
+}
+
+.stats-info {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.gender-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-label {
+  font-weight: bold;
+  color: #606266;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #409EFF;
+}
+
+.chart-container {
+  height: 600px;
   width: 100%;
-  height: 100%;
+  margin-top: 20px;
+}
+
+:deep(.el-card__header) {
+  padding: 15px 20px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+:deep(.el-card__body) {
+  padding: 20px;
 }
 </style>

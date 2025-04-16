@@ -8,6 +8,7 @@ import DateTimeSelect from "@/components/utils/DateTimeSelect.vue";
 import ColorSelect from "@/components/utils/ColorSelect.vue";
 import NumberInput from "@/components/utils/NumberInput.vue";
 import ChartInit from "@/components/stats/components/ChartInit.vue";
+import { ElMessage } from 'element-plus';
 
 // https://echarts.apache.org/examples/en/editor.html
 
@@ -173,55 +174,201 @@ const set_top_user = async (wxid: string) => {
 </script>
 
 <template>
-  <div class="common-layout" style="background-color: #d2d2fa;height: 100%;width: 100%;">
-    <el-container style="height: 100%;width: 100%;">
-      <el-header :height="'80px'" style="width: 100%;">
-        <strong>时间(默认全部)：</strong>
-        <DateTimeSelect @datetime="(val: any) => {datetime = val;}"/> &nbsp;
-        <el-select
-            v-model="word"
-            filterable
-            remote
-            reserve-keyword
-            placeholder="输入想查看的联系人"
-            remote-show-suffix
-            clearable
-            :remote-method="search_user"
-            :loading="loading"
-            style="width: 240px"
-        >
-          <el-option v-for="item in user_options" :key="item.wxid" :label="gen_show_name(item)" :value="item.wxid"/>
-        </el-select>&nbsp;
-        <el-button type="primary" @click="refreshChart">查看</el-button>
-        &nbsp
-        <strong>颜色设置：</strong>
-        bg:
-        <color-select
-            @updateColors="(val:any)=>{val?chart_option.backgroundColor=val:'';refreshChart(false)}"></color-select>
-        min:
-        <number-input :n="chart_option.visualMap.min" :step="100"
-                      @updateNumber="(val:any)=>{val?chart_option.visualMap.min=val:'';refreshChart(false)}"></number-input>
-        max:
-        <number-input :n="chart_option.visualMap.max" :step="100"
-                      @updateNumber="(val:any)=>{val?chart_option.visualMap.max=val:'';refreshChart(false)}"></number-input>
-        <br>
-        <strong>top10[总:(收/发)]：</strong>
-        <template v-for="wxid in Object.keys(top_user_count)" :key="wxid">
-          <el-button type="primary" plain @click="set_top_user(wxid)" size="small">
-            {{ gen_show_name(top_user[wxid]) }} [{{ top_user_count[wxid]?.total_count }}({{
-              top_user_count[wxid]?.receiver_count
-            }}/{{ top_user_count[wxid]?.sender_count }})]
-          </el-button>
-        </template>
-      </el-header>
+  <div class="heatmap-container">
+    <el-card class="heatmap-card">
+      <template #header>
+        <div class="card-header">
+          <span class="title">聊天记录热力图</span>
+        </div>
+      </template>
 
-      <el-main style="height: calc(100% - 100px);width: 100%;">
-        <chart-init :option="chart_option" :update="is_update"/>
-      </el-main>
-    </el-container>
+      <div class="content">
+        <div class="control-panel">
+          <div class="control-group">
+            <div class="control-item">
+              <span class="label">时间范围：</span>
+              <DateTimeSelect @datetime="(val: any) => {datetime = val;}"/>
+            </div>
+            
+            <div class="control-item">
+              <span class="label">联系人：</span>
+              <el-select
+                v-model="word"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="输入想查看的联系人"
+                remote-show-suffix
+                clearable
+                :remote-method="search_user"
+                :loading="loading"
+                class="user-select"
+              >
+                <el-option 
+                  v-for="item in user_options" 
+                  :key="item.wxid" 
+                  :label="gen_show_name(item)" 
+                  :value="item.wxid"
+                />
+              </el-select>
+            </div>
+
+            <div class="control-item">
+              <el-button type="primary" @click="refreshChart">查看</el-button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="control-item">
+              <span class="label">背景色：</span>
+              <color-select
+                @updateColors="(val:any)=>{val?chart_option.backgroundColor=val:'';refreshChart(false)}"
+              />
+            </div>
+
+            <div class="control-item">
+              <span class="label">最小值：</span>
+              <number-input 
+                :n="chart_option.visualMap.min" 
+                :step="100"
+                @updateNumber="(val:any)=>{val?chart_option.visualMap.min=val:'';refreshChart(false)}"
+              />
+            </div>
+
+            <div class="control-item">
+              <span class="label">最大值：</span>
+              <number-input 
+                :n="chart_option.visualMap.max" 
+                :step="100"
+                @updateNumber="(val:any)=>{val?chart_option.visualMap.max=val:'';refreshChart(false)}"
+              />
+            </div>
+          </div>
+
+          <div class="top-users">
+            <span class="label">TOP10[总:(收/发)]：</span>
+            <div class="user-buttons">
+              <el-button 
+                v-for="wxid in Object.keys(top_user_count)" 
+                :key="wxid"
+                type="primary" 
+                plain 
+                @click="set_top_user(wxid)" 
+                size="small"
+                class="user-button"
+              >
+                {{ gen_show_name(top_user[wxid]) }} 
+                [{{ top_user_count[wxid]?.total_count }}
+                ({{ top_user_count[wxid]?.receiver_count }}/{{ top_user_count[wxid]?.sender_count }})]
+              </el-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <chart-init :option="chart_option" :update="is_update"/>
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <style scoped>
+.heatmap-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.heatmap-card {
+  width: 95%;
+  max-width: 1200px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #303133;
+}
+
+.content {
+  padding: 20px;
+}
+
+.control-panel {
+  margin-bottom: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.label {
+  font-weight: bold;
+  color: #606266;
+  white-space: nowrap;
+}
+
+.user-select {
+  width: 240px;
+}
+
+.top-users {
+  margin-top: 20px;
+}
+
+.user-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.user-button {
+  margin: 5px;
+}
+
+.chart-container {
+  height: 600px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+:deep(.el-select) {
+  width: 240px;
+}
+
+:deep(.el-button) {
+  margin: 0;
+}
+
+:deep(.el-card__header) {
+  padding: 15px 20px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+:deep(.el-card__body) {
+  padding: 20px;
+}
 </style>

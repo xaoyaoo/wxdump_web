@@ -38,7 +38,7 @@ onMounted(() => {
 
 <template>
   <el-container>
-    <el-header style="height: 40px; max-height: 40px; width: 100%;background-color: #d2d2fa;padding-top: 5px;">
+    <el-header style="height: auto; width: 100%;padding-top: 10px;background-color: #f5f5f5;">
       <ChatRecprdsHeader :wxid="wxid" @exporting="onExport"/>
     </el-header>
     <el-main style="height: calc(100vh - 40px);padding: 0;margin: 0;background-color: #f5f5f5;">
@@ -49,5 +49,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
+.el-container {
+  height: 100%;
+  width: 100%;
+}
 </style>
