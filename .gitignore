@@ -32,3 +32,4 @@ tsconfig.app.tsbuildinfo
 tsconfig.node.tsbuildinfo
 
 /public/data/
+__init__.py

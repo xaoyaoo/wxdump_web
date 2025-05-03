@@ -22,7 +22,7 @@ export default defineConfig({
         // 访问项目的端口号
         port: 8080,
         // 自动启动浏览器
-        open: true,
+        open: false,
         // 配置反向代理处理跨域请求
         proxy: {
             "/api/ls": {
